@@ -3,7 +3,7 @@ import multiprocessing as mp
 import numpy as np
 
 from multiprocessing import Pool, Value, Array
-from kmeans import evalQualityCluster
+from kmeans import evalQualityCluster, parallel_evalQualityCluster
 from read_fasta import create_labels
 
 
@@ -20,12 +20,8 @@ if __name__ == "__main__":
 
     t1 = time.time()
     n_workers = 40
-    pool = Pool(n_workers)
-    for input1, input2 in zip(np.array_split(y_true, n_workers), np.array_split(y_pred, n_workers)):
-        print("y_true: ", input1)
-        print("y_pred: ", input2)
-        res = pool.apply_async(evalQualityCluster, args=(input1, input2, n_workers))
-        print(res.get())
+
+    prec, recall = parallel_evalQualityCluster(y_true, y_pred, n_workers=n_workers, n_clusters=n_cluster)
 
     t2 = time.time()
     print("Finised time in %f (s)" % (t2 - t1))

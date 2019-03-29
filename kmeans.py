@@ -1,6 +1,7 @@
 import logging
 import time
 import numpy as np
+import multiprocessing as mp
 
 from sklearn.metrics import confusion_matrix
 from sklearn.cluster import KMeans
@@ -14,8 +15,6 @@ def evalQuality(y_true, y_pred, n_clusters=2):
 
 
 def evalQualityCluster(y_true, y_pred, n_clusters=2):
-    print(y_true)
-    print(y_pred)
     TP, FP, TN, FN = 0, 0, 0, 0
     for i in range(0, len(y_true) - 1):
         for j in range(i + 1, len(y_true)):
@@ -27,6 +26,21 @@ def evalQualityCluster(y_true, y_pred, n_clusters=2):
                 FP += 1
             else:
                 TN += 1
+    return TP, FP, TN, FN
+
+
+def parallel_evalQualityCluster(y_true, y_pred, n_workers=3, n_clusters=2):
+    TP, FP, TN, FN = 0, 0, 0, 0
+    pool = mp.Pool(n_workers)
+
+    for input1, input2 in zip(np.array_split(y_true, n_workers), np.array_split(y_pred, n_workers)):
+        _res = pool.apply_async(evalQualityCluster, args=(input1, input2, n_clusters))
+        result = _res.get()
+        TP += result[0]
+        FP += result[0]
+        TN += result[0]
+        FN += result[0]
+
     prec = TP / (TP + FP)
     rcal = TP / (TP + FN)
     return prec, rcal
