@@ -72,7 +72,7 @@ if __name__ == "__main__":
     ##############
     extension_file = '.fna'
     file_name = name + extension_file
-    OUTPUT_DIR = OUTPUT_DIR + name
+    OUTPUT_DIR = OUTPUT_DIR + name + '/'
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
 

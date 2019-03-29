@@ -14,6 +14,8 @@ def evalQuality(y_true, y_pred, n_clusters=2):
 
 
 def evalQualityCluster(y_true, y_pred, n_clusters=2):
+    print(y_true)
+    print(y_pred)
     TP, FP, TN, FN = 0, 0, 0, 0
     for i in range(0, len(y_true) - 1):
         for j in range(i + 1, len(y_true)):
