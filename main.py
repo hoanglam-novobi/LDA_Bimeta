@@ -7,8 +7,8 @@ import ast
 
 from read_fasta import read_fasta_file, create_labels
 from lda import create_document, create_corpus, do_LDA, getDocTopicDist
-from kmeans import do_kmeans, evalQualityCluster, read_bimeta_input, create_characteristic_vector
-
+from kmeans import do_kmeans, evalQualityCluster
+from bimeta import read_bimeta_input, create_characteristic_vector
 # LOGGING
 logging.basicConfig(level=logging.INFO,
                     filename='LDABimeta.log',
