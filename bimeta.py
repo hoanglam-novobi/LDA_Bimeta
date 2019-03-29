@@ -1,5 +1,9 @@
 import networkx as nx
 import random
+import logging
+import time
+import numpy as np
+
 
 def findNeighbors(graph_object, group):
     """
@@ -56,3 +60,36 @@ def phase_1_Bimeta(graph_object):
     return groups
 
 
+def read_bimeta_input(path, file_name):
+    """
+    Read the result of phase 1 from Bimeta
+    The id of read in the file is from 1 so we need to convert the id from 0 to n-1.
+    :param path:
+    :param file_name:
+    :return:
+    """
+    t1 = time.time()
+    logging.info("Reading seeds group ...")
+    res = {}
+    with open(path + file_name, 'r') as f:
+        for row_id, line in enumerate(f):
+            line = line.split(',')
+            print(line)
+            if len(line) <= 1:
+                continue
+            res[row_id] = [int(read_id) for read_id in line[1:]]
+    t2 = time.time()
+    logging.info("Finished read the result from phase 1 Bimeta in %f (s)." % (t2 - t1))
+    return res
+
+
+def create_characteristic_vector(top_dist, seeds):
+    t1 = time.time()
+    logging.info("Creating median vector in seeds.")
+    res = []
+    for id, value in seeds.items():
+        tmp = top_dist[value]
+        res.append(np.mean(tmp, axis=0))
+    t2 = time.time()
+    logging.info("Finished creating median vector of small group in seeds in %f (s)." % (t2 - t1))
+    return np.array(res)

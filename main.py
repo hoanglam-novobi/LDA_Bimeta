@@ -7,7 +7,7 @@ import ast
 
 from read_fasta import read_fasta_file, create_labels
 from lda import create_document, create_corpus, do_LDA, getDocTopicDist
-from kmeans import do_kmeans, evalQualityCluster
+from kmeans import do_kmeans, evalQualityCluster, read_bimeta_input, create_characteristic_vector
 
 # LOGGING
 logging.basicConfig(level=logging.INFO,
@@ -21,6 +21,8 @@ if __name__ == "__main__":
     logging.info("Number of arguments: %d ." % n_arguments)
     logging.info("Argument list: %s ." % str(sys.argv))
 
+    # the directory to load the result from phase 1 Bimeta
+    BIMETA_INPUT = ''
     # the directory to save the output
     OUTPUT_DIR = ''
     # the name of file in dataset. Ex: S1, S4, R4
@@ -33,24 +35,28 @@ if __name__ == "__main__":
     data_path = ''
     n_workers = ''
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'ho:d:i:k:n:p:l:')
+        opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:')
     except getopt.GetoptError:
         print("Example for command line.")
-        print("main.py -o <output_dir> -d <input dir> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers>")
-        print("main.py -o ../output_dir/ -d ../input_dir/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40")
+        print(
+            "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers>")
+        print("main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40")
         sys.exit(2)
 
     for opt, arg in opts:
         if opt == '-h':
             print("Example for command line.")
             print(
-                "main.py -o <output_dir> -d <input dir> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers>")
-            print("main.py -o ../output_dir/ -d ../input_dir/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40")
+                "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers>")
+            print(
+                "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40")
             sys.exit()
         elif opt == '-o':
             OUTPUT_DIR = arg
         elif opt == '-d':
             data_path = arg
+        elif opt == '-b':
+            BIMETA_INPUT = arg
         elif opt == '-i':
             name = arg
         elif opt == '-k':
@@ -72,7 +78,8 @@ if __name__ == "__main__":
     ##########################################
     # READING FASTA FILE
     ##########################################
-    reads = read_fasta_file(data_path + file_name, pair_end=False)
+    is_pairend = True if name[0] == 'S' else False
+    reads = read_fasta_file(data_path + file_name, pair_end=is_pairend)
 
     ##########################################
     # CREATE DOCUMENTS, CORPUS
@@ -99,19 +106,35 @@ if __name__ == "__main__":
     top_dist, lda_keys = getDocTopicDist(lda_model, corpus, True)
 
     ##########################################
-    # CLUSTERING
+    # CLUSTERING WITH LDA
     ##########################################
     # create label for the dataset
     labels, n_clusters = create_labels(name)
-    predictions = do_kmeans(top_dist, n_clusters=n_clusters, n_workers=n_workers)
+    lda_predictions = do_kmeans(top_dist, n_clusters=n_clusters, n_workers=n_workers)
 
     ##########################################
     # EVALUATE THE RESULT
     ##########################################
-    prec, recall = evalQualityCluster(labels, predictions, n_clusters=n_clusters)
-    logging.info("Clustering result of %s: Prec = %f ; Recall = %f ." % (name, prec, recall))
+    lda_prec, lda_recall = evalQualityCluster(labels, lda_predictions, n_clusters=n_clusters)
+    logging.info("Clustering result of %s with LDA: Prec = %f ; Recall = %f ." % (name, lda_prec, lda_recall))
 
     ##########################################
     # LDA + Bimeta
     ##########################################
+    bimeta_extensions = '.fna.seeds.txt'
+    seeds_dict = read_bimeta_input(BIMETA_INPUT, name + bimeta_extensions)
+    seeds = create_characteristic_vector(top_dist, seeds_dict)
+
+    ##########################################
+    # CLUSTERING WITH LDA + BIMETA
+    ##########################################
+    lda_bimeta_predictions = do_kmeans(top_dist, seeds=seeds, n_clusters=n_clusters, n_workers=n_workers)
+
+    ##########################################
+    # EVALUATE THE RESULT
+    ##########################################
+    lda_bimeta_prec, lda_bimeta_recall = evalQualityCluster(labels, lda_bimeta_predictions, n_clusters=n_clusters)
+    logging.info("Clustering result of %s with LDA + Bimeta: Prec = %f ; Recall = %f ." % (
+    name, lda_bimeta_prec, lda_bimeta_recall))
+
     logging.info("++++++++++++++++++++ END ++++++++++++++++++++++")

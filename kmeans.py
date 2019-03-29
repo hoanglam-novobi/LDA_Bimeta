@@ -29,11 +29,14 @@ def evalQualityCluster(y_true, y_pred, n_clusters=2):
     return prec, rcal
 
 
-def do_kmeans(top_dist, n_clusters=2, n_workers=2, n_init=100, iters=10000):
+def do_kmeans(top_dist, seeds=None, n_clusters=2, n_workers=2, n_init=100, iters=10000):
     t1 = time.time()
     logging.info("Clustering with Kmeans ...")
     kmeans = KMeans(n_clusters=n_clusters, n_jobs=n_workers, n_init=n_init, max_iter=iters)
-    kmeans.fit(top_dist)
+    if not seeds:
+        kmeans.fit(top_dist)
+    else:
+        kmeans.fit(seeds)
     predictions = kmeans.fit_predict(top_dist)
     t2 = time.time()
     logging.info("Finish clustering with Kmeans in %f (s)." % (t2 - t1))
