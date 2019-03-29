@@ -37,9 +37,9 @@ def parallel_evalQualityCluster(y_true, y_pred, n_workers=3, n_clusters=2):
         _res = pool.apply_async(evalQualityCluster, args=(input1, input2, n_clusters))
         result = _res.get()
         TP += result[0]
-        FP += result[0]
-        TN += result[0]
-        FN += result[0]
+        FP += result[1]
+        TN += result[2]
+        FN += result[3]
 
     prec = TP / (TP + FP)
     rcal = TP / (TP + FN)

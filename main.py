@@ -8,8 +8,9 @@ import numpy as np
 
 from read_fasta import read_fasta_file, create_labels
 from lda import create_document, create_corpus, do_LDA, getDocTopicDist
-from kmeans import do_kmeans, evalQualityCluster
+from kmeans import do_kmeans, evalQualityCluster, parallel_evalQualityCluster
 from bimeta import read_bimeta_input, create_characteristic_vector
+
 # LOGGING
 logging.basicConfig(level=logging.INFO,
                     filename='LDABimeta.log',
@@ -116,7 +117,8 @@ if __name__ == "__main__":
     ##########################################
     # EVALUATE THE RESULT
     ##########################################
-    lda_prec, lda_recall = evalQualityCluster(labels, lda_predictions, n_clusters=n_clusters)
+    lda_prec, lda_recall = parallel_evalQualityCluster(labels, lda_predictions, n_clusters=n_clusters,
+                                                       n_workers=n_workers)
     logging.info("Clustering result of %s with LDA: Prec = %f ; Recall = %f ." % (name, lda_prec, lda_recall))
 
     ##########################################
@@ -134,8 +136,9 @@ if __name__ == "__main__":
     ##########################################
     # EVALUATE THE RESULT
     ##########################################
-    lda_bimeta_prec, lda_bimeta_recall = evalQualityCluster(labels, lda_bimeta_predictions, n_clusters=n_clusters)
+    lda_bimeta_prec, lda_bimeta_recall = parallel_evalQualityCluster(labels, lda_bimeta_predictions,
+                                                                     n_clusters=n_clusters, n_workers=n_workers)
     logging.info("Clustering result of %s with LDA + Bimeta: Prec = %f ; Recall = %f ." % (
-    name, lda_bimeta_prec, lda_bimeta_recall))
+        name, lda_bimeta_prec, lda_bimeta_recall))
 
     logging.info("++++++++++++++++++++ END ++++++++++++++++++++++")
