@@ -4,6 +4,7 @@ import logging
 import pickle
 import sys, getopt
 import ast
+import numpy as np
 
 from read_fasta import read_fasta_file, create_labels
 from lda import create_document, create_corpus, do_LDA, getDocTopicDist
@@ -110,7 +111,7 @@ if __name__ == "__main__":
     ##########################################
     # create label for the dataset
     labels, n_clusters = create_labels(name)
-    lda_predictions = do_kmeans(top_dist, seeds=None, n_clusters=n_clusters, n_workers=n_workers)
+    lda_predictions = do_kmeans(top_dist, seeds=np.array([]), n_clusters=n_clusters, n_workers=n_workers)
 
     ##########################################
     # EVALUATE THE RESULT
