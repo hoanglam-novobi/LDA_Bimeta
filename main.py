@@ -110,7 +110,7 @@ if __name__ == "__main__":
     ##########################################
     # create label for the dataset
     labels, n_clusters = create_labels(name)
-    lda_predictions = do_kmeans(top_dist, n_clusters=n_clusters, n_workers=n_workers)
+    lda_predictions = do_kmeans(top_dist, seeds=None, n_clusters=n_clusters, n_workers=n_workers)
 
     ##########################################
     # EVALUATE THE RESULT

@@ -33,7 +33,7 @@ def do_kmeans(top_dist, seeds=None, n_clusters=2, n_workers=2, n_init=100, iters
     t1 = time.time()
     logging.info("Clustering with Kmeans ...")
     kmeans = KMeans(n_clusters=n_clusters, n_jobs=n_workers, n_init=n_init, max_iter=iters)
-    if seeds != None:
+    if seeds == None:
         kmeans.fit(top_dist)
     else:
         kmeans.fit(seeds)
