@@ -1,5 +1,6 @@
 import logging
 import time
+import numpy as np
 
 from sklearn.metrics import confusion_matrix
 from sklearn.cluster import KMeans
@@ -29,11 +30,11 @@ def evalQualityCluster(y_true, y_pred, n_clusters=2):
     return prec, rcal
 
 
-def do_kmeans(top_dist, seeds=None, n_clusters=2, n_workers=2, n_init=100, iters=10000):
+def do_kmeans(top_dist, seeds=np.array([]), n_clusters=2, n_workers=2, n_init=100, iters=10000):
     t1 = time.time()
     logging.info("Clustering with Kmeans ...")
     kmeans = KMeans(n_clusters=n_clusters, n_jobs=n_workers, n_init=n_init, max_iter=iters)
-    if seeds == None:
+    if seeds.size == 0:
         kmeans.fit(top_dist)
     else:
         kmeans.fit(seeds)
