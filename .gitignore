@@ -3,3 +3,4 @@
 *.gensim
 *.txt
 *.log
+__pycache__/
