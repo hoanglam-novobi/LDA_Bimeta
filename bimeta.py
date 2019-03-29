@@ -87,7 +87,7 @@ def create_characteristic_vector(top_dist, seeds):
     logging.info("Creating median vector in seeds.")
     res = []
     for id, value in seeds.items():
-        tmp = top_dist[value]
+        tmp = top_dist[value, :]
         res.append(np.mean(tmp, axis=0))
     t2 = time.time()
     logging.info("Finished creating median vector of small group in seeds in %f (s)." % (t2 - t1))
