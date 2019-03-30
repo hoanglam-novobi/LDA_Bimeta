@@ -8,7 +8,7 @@ from Bio import SeqIO
 import sys
 from memory_profiler import profile, LogFile
 
-sys.stdout(LogFile(__name__))
+sys.stdout = LogFile(__name__)
 
 # LABELS for datasets
 actual_labels = {

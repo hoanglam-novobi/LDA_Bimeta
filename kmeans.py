@@ -10,7 +10,7 @@ from sklearn.cluster import KMeans
 import sys
 from memory_profiler import profile, LogFile
 
-sys.stdout(LogFile(__name__))
+sys.stdout = LogFile(__name__)
 
 
 @profile

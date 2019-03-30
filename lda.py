@@ -15,8 +15,7 @@ from gensim.models.tfidfmodel import TfidfModel
 import sys
 from memory_profiler import profile, LogFile
 
-sys.stdout(LogFile(__name__))
-
+sys.stdout = LogFile(__name__)
 
 @profile
 def genkmers(k):

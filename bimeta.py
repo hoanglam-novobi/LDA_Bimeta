@@ -8,7 +8,7 @@ import numpy as np
 import sys
 from memory_profiler import profile, LogFile
 
-sys.stdout(LogFile(__name__))
+sys.stdout = LogFile(__name__)
 
 
 @profile
