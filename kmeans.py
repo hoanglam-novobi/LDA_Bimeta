@@ -6,7 +6,14 @@ import multiprocessing as mp
 from sklearn.metrics import confusion_matrix
 from sklearn.cluster import KMeans
 
+# CONFIG FOR LOGGING MEMORY_PROFILER
+import sys
+from memory_profiler import profile, LogFile
 
+sys.stdout(LogFile(__name__))
+
+
+@profile
 def evalQuality(y_true, y_pred, n_clusters=2):
     A = confusion_matrix(y_pred, y_true)
     prec = sum([max(A[:, j]) for j in range(0, n_clusters)]) / sum([sum(A[i, :]) for i in range(0, n_clusters)])
@@ -14,6 +21,7 @@ def evalQuality(y_true, y_pred, n_clusters=2):
     return prec, rcal
 
 
+@profile
 def evalQualityCluster(y_true, y_pred, n_clusters=2):
     TP, FP, TN, FN = 0, 0, 0, 0
     for i in range(0, len(y_true) - 1):
@@ -29,6 +37,7 @@ def evalQualityCluster(y_true, y_pred, n_clusters=2):
     return TP, FP, TN, FN
 
 
+@profile
 def parallel_evalQualityCluster(y_true, y_pred, n_workers=3, n_clusters=2):
     TP, FP, TN, FN = 0, 0, 0, 0
     pool = mp.Pool(n_workers)
@@ -46,6 +55,7 @@ def parallel_evalQualityCluster(y_true, y_pred, n_workers=3, n_clusters=2):
     return prec, rcal
 
 
+@profile
 def do_kmeans(top_dist, seeds=np.array([]), n_clusters=2, n_workers=2, n_init=100, iters=10000):
     t1 = time.time()
     logging.info("Clustering with Kmeans ...")

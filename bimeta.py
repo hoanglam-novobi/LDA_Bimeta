@@ -4,7 +4,14 @@ import logging
 import time
 import numpy as np
 
+# CONFIG FOR LOGGING MEMORY_PROFILER
+import sys
+from memory_profiler import profile, LogFile
 
+sys.stdout(LogFile(__name__))
+
+
+@profile
 def findNeighbors(graph_object, group):
     """
     :param group: list of integer
@@ -17,6 +24,7 @@ def findNeighbors(graph_object, group):
     return neighbor_hoods
 
 
+@profile
 def phase_1_Bimeta(graph_object):
     maxS = 9000
     groups = {}
@@ -60,6 +68,7 @@ def phase_1_Bimeta(graph_object):
     return groups
 
 
+@profile
 def read_bimeta_input(path, file_name):
     """
     Read the result of phase 1 from Bimeta
@@ -82,6 +91,7 @@ def read_bimeta_input(path, file_name):
     return res
 
 
+@profile
 def create_characteristic_vector(top_dist, seeds):
     t1 = time.time()
     logging.info("Creating median vector in seeds.")

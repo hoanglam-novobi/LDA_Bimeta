@@ -11,12 +11,20 @@ from gensim.models.ldamodel import LdaModel
 from gensim.models.ldamulticore import LdaMulticore
 from gensim.models.tfidfmodel import TfidfModel
 
+# CONFIG FOR LOGGING MEMORY_PROFILER
+import sys
+from memory_profiler import profile, LogFile
 
+sys.stdout(LogFile(__name__))
+
+
+@profile
 def genkmers(k):
     bases = ['A', 'C', 'G', 'T']
     return [''.join(p) for p in it.product(bases, repeat=k)]
 
 
+@profile
 def extract_k_mers(sequence, k):
     res = []
     for i in range(len(sequence) - k + 1):
@@ -24,6 +32,7 @@ def extract_k_mers(sequence, k):
     return res
 
 
+@profile
 def create_document(reads, k=[]):
     """
     Create a set of document from reads, consist of all k-mer in each read
@@ -58,6 +67,7 @@ def create_document(reads, k=[]):
     return dictionary, documents
 
 
+@profile
 def create_corpus(dictionary, documents, is_tfidf=False):
     logging.info("Creating corpus ...")
     t1 = time.time()
@@ -71,6 +81,7 @@ def create_corpus(dictionary, documents, is_tfidf=False):
     return corpus
 
 
+@profile
 def getDocTopicDist(model, corpus, kwords=False, n_topics=10):
     """
     LDA transformation, for each doc only returns topics with non-zero weight
@@ -96,6 +107,7 @@ def getDocTopicDist(model, corpus, kwords=False, n_topics=10):
     return np.array(top_dist), keys
 
 
+@profile
 def do_LDA(corpus, dictionary, n_topics=10, n_worker=2, n_passes=15, max_iters=200):
     t1 = time.time()
     # training LDA model
@@ -106,16 +118,19 @@ def do_LDA(corpus, dictionary, n_topics=10, n_worker=2, n_passes=15, max_iters=2
     return lda_model
 
 
+@profile
 def load_LDAModel(path, file_name):
     lda = gensim.models.ldamodel.LdaModel.load(path + file_name)
     return lda
 
 
+@profile
 def load_dictionary(path, file_name):
     dictionary = gensim.corpora.Dictionary.load(path + file_name)
     return dictionary
 
 
+@profile
 def load_corpus(path, file_name):
     corpus = pickle.load(open(path + file_name, 'rb'))
     return corpus

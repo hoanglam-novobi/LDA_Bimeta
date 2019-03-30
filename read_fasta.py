@@ -4,6 +4,12 @@ import time
 
 from Bio import SeqIO
 
+# CONFIG FOR LOGGING MEMORY_PROFILER
+import sys
+from memory_profiler import profile, LogFile
+
+sys.stdout(LogFile(__name__))
+
 # LABELS for datasets
 actual_labels = {
     'R1': [42189, 40771],
@@ -23,6 +29,7 @@ actual_labels = {
 }
 
 
+@profile
 def read_fasta_file(file_name, pair_end=True):
     t1 = time.time()
     # read sequence from fasta file
@@ -37,7 +44,7 @@ def read_fasta_file(file_name, pair_end=True):
     logging.info("Finished reading data in %f (s)" % (t2 - t1))
     return all_reads
 
-
+@profile
 def create_labels(name):
     n_cluster = len(actual_labels[name])
     labels = []
