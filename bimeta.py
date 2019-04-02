@@ -102,3 +102,39 @@ def create_characteristic_vector(top_dist, seeds):
     t2 = time.time()
     logging.info("Finished creating median vector of small group in seeds in %f (s)." % (t2 - t1))
     return np.array(res)
+
+
+def genOverlapGraph(reads, l=20, threshold=5):
+    k_mer_dict = {}
+    for idx, read in enumerate(reads):
+        for i in range(0, len(read)-l+1):
+            k_mer = read[i:i + l]
+            if k_mer not in k_mer_dict:
+                k_mer_dict[k_mer] = [idx]
+            else:
+                k_mer_dict[k_mer].append(idx)
+
+    for key, value in k_mer_dict.items():
+        if len(value) >= 200:
+            k_mer_dict.pop(key)
+
+    overlap_dict = {}
+
+
+    G = nx.Graph()
+    for i in range(0, len(reads) - 1):
+        for j in range(i + 1, len(reads)):
+            if len(dict[i].intersection(dict[j])) >= threshold:
+                G.add_edge(i + 1, j + 1)
+        print("Testing from %d..." % (i))
+    return G
+
+
+def find_max_independent_set(graph_object):
+    """
+    Find list of nodes in independent set of the graph.
+    Using an approximate algorithms in the library Networkx
+    :param graph_object:
+    :return: list of node_id from 1 to n
+    """
+    return nx.maximal_independent_set(graph_object)

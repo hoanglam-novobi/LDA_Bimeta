@@ -19,6 +19,7 @@ from memory_profiler import profile, LogFile
 
 sys.stdout = LogFile(__name__)
 
+
 @profile
 def genkmers(k):
     bases = ['A', 'C', 'G', 'T']
@@ -68,6 +69,11 @@ def create_document(reads, k=[]):
     return dictionary, documents
 
 
+def save_documents(documents, file_path):
+    with open(file_path, 'w') as f:
+        f.writelines('\n'.join(documents))
+
+
 @profile
 def parallel_create_document(reads, k=[], n_workers=2):
     """
@@ -97,7 +103,6 @@ def parallel_create_document(reads, k=[], n_workers=2):
     for group in splited_reads:
         for value in k:
             pool.apply_async(create_document, args=(group, value))
-
 
     # create a set of document
     documents = []
