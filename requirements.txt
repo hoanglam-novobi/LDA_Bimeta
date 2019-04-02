@@ -1,0 +1,16 @@
+memory-profiler
+MulticoreTSNE
+networkx
+numpy
+pandas
+pandas-ml
+plotly
+pyLDAvis
+scikit-learn
+scipy
+sklearn
+tensorflow
+virtualenv
+multiprocessing
+gensim
+biopython
