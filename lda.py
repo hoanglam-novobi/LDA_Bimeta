@@ -4,12 +4,14 @@ import time
 import numpy as np
 import pickle
 import gensim
+import multiprocessing as mp
 
 from collections import OrderedDict
 from gensim import corpora
 from gensim.models.ldamodel import LdaModel
 from gensim.models.ldamulticore import LdaMulticore
 from gensim.models.tfidfmodel import TfidfModel
+from multiprocessing import Pool
 
 # CONFIG FOR LOGGING MEMORY_PROFILER
 import sys
@@ -53,6 +55,44 @@ def create_document(reads, k=[]):
     k_mers_set = [genkmers(val) for val in k]
     logging.info("Creating k-mers dictionary ...")
     dictionary = corpora.Dictionary(k_mers_set)
+
+    # create a set of document
+    documents = []
+    for read in reads:
+        k_mers_read = []
+        for value in k:
+            k_mers_read += [read[j:j + value] for j in range(0, len(read) - value + 1)]
+        documents.append(k_mers_read)
+    t2 = time.time()
+    logging.info("Finished create document in %f (s)." % (t2 - t1))
+    return dictionary, documents
+
+
+@profile
+def parallel_create_document(reads, k=[], n_workers=2):
+    """
+    Create a set of document from reads, consist of all k-mer in each read
+    For example:
+    k = [3, 4, 5]
+    documents =
+    [
+        'AAA AAT ... AAAT AAAC ... AAAAT AAAAC' - read 1
+        'AAA AAT ... AAAT AAAC ... AAAAT AAAAC' - read 2
+        ...
+        'AAA AAT ... AAAT AAAC ... AAAAT AAAAC' - read n
+    ]
+    :param reads:
+    :param k: list of int
+    :return: list of str
+    """
+    t1 = time.time()
+    # create k-mer dictionary
+    k_mers_set = [genkmers(val) for val in k]
+    logging.info("Creating k-mers dictionary ...")
+    dictionary = corpora.Dictionary(k_mers_set)
+
+    pool = Pool(n_workers)
+    pool.apply()
 
     # create a set of document
     documents = []

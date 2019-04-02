@@ -36,13 +36,14 @@ if __name__ == "__main__":
     # the direction for read dataset
     data_path = ''
     n_workers = ''
+    is_tfidf = False
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:')
+        opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:tfidf:')
     except getopt.GetoptError:
         print("Example for command line.")
         print(
             "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers>")
-        print("main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40")
+        print("main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -tfidf 1")
         sys.exit(2)
 
     for opt, arg in opts:
@@ -51,7 +52,7 @@ if __name__ == "__main__":
             print(
                 "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers>")
             print(
-                "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40")
+                "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -tfidf 1")
             sys.exit()
         elif opt == '-o':
             OUTPUT_DIR = arg
@@ -69,6 +70,8 @@ if __name__ == "__main__":
             n_passes = int(arg)
         elif opt == '-j':
             n_workers = int(arg)
+        elif opt == '-tfidf':
+            is_tfidf = True if is_tfidf == '1' else False
 
     ##############
     extension_file = '.fna'
@@ -87,12 +90,15 @@ if __name__ == "__main__":
     # CREATE DOCUMENTS, CORPUS
     ##########################################
     dictionary, documents = create_document(reads, k=k)
+    del reads
+    logging.info("Delete reads for saving memory ...")
     logging.info("Writing dictionary into %s." % OUTPUT_DIR)
     dictionary.save(OUTPUT_DIR + 'dictionary-k%s.gensim' % (''.join(str(val) for val in k)))
 
     # if you want to create corpus with TFIDF, set it is True
-    is_tfidf = False
     corpus = create_corpus(dictionary, documents, is_tfidf=is_tfidf)
+    logging.info("Deleting documents for saving memory ...")
+    del documents
     logging.info("Writing corpus into %s." % OUTPUT_DIR)
     corpus_name = 'corpus-tfidf.pkl' if is_tfidf else 'corpus.pkl'
     pickle.dump(corpus, open(OUTPUT_DIR + corpus_name, 'wb'))
@@ -106,6 +112,11 @@ if __name__ == "__main__":
 
     # get topic distribution
     top_dist, lda_keys = getDocTopicDist(lda_model, corpus, True)
+    logging.info("Deleting reads for saving memory ...")
+    del corpus
+    logging.info("Saving topic distribution into %s." % OUTPUT_DIR)
+    np.savetxt(OUTPUT_DIR + name + "top_dist.csv", top_dist, fmt='%.5e', delimiter=",",
+               header=','.join([str(i) for i in range(n_topics)]))
 
     ##########################################
     # CLUSTERING WITH LDA
