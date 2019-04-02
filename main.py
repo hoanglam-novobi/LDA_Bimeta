@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 from read_fasta import read_fasta_file, create_labels
-from lda import create_document, create_corpus, do_LDA, getDocTopicDist, save_documents
+from lda import create_document, create_corpus, do_LDA, getDocTopicDist, save_documents, parallel_create_document
 from kmeans import do_kmeans, evalQuality
 from bimeta import read_bimeta_input, create_characteristic_vector
 
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         ##########################################
         # CREATE DOCUMENTS, CORPUS
         ##########################################
-        dictionary, documents = create_document(reads, k=k)
+        dictionary, documents = parallel_create_document(reads, k=k, n_workers=n_workers)
         del reads
         logging.info("Delete reads for saving memory ...")
         logging.info("Writing dictionary into %s." % OUTPUT_DIR)
@@ -106,8 +106,8 @@ if __name__ == "__main__":
 
         # if you want to create corpus with TFIDF, set it is True
         corpus = create_corpus(dictionary, documents, is_tfidf=is_tfidf)
-        logging.info("Saving documents as .txt file for using later into %s ." % OUTPUT_DIR)
-        save_documents(documents, OUTPUT_DIR + 'documents.txt')
+        # logging.info("Saving documents as .txt file for using later into %s ." % OUTPUT_DIR)
+        # save_documents(documents, OUTPUT_DIR + 'documents.txt')
         logging.info("Deleting documents for saving memory ...")
         del documents
         logging.info("Writing corpus into %s." % OUTPUT_DIR)

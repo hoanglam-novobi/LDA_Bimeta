@@ -71,7 +71,8 @@ def create_document(reads, k=[]):
 
 def save_documents(documents, file_path):
     with open(file_path, 'w') as f:
-        f.writelines('\n'.join(documents))
+        for d in documents:
+            f.write("%s\n" % d)
 
 
 @profile
@@ -91,26 +92,21 @@ def parallel_create_document(reads, k=[], n_workers=2):
     :param k: list of int
     :return: list of str
     """
+
     t1 = time.time()
     # create k-mer dictionary
     k_mers_set = [genkmers(val) for val in k]
     logging.info("Creating k-mers dictionary ...")
     dictionary = corpora.Dictionary(k_mers_set)
 
-    splited_reads = np.array_split(reads, n_workers)
-    pool = Pool(n_workers)
-
-    for group in splited_reads:
-        for value in k:
-            pool.apply_async(create_document, args=(group, value))
-
-    # create a set of document
     documents = []
-    for read in reads:
-        k_mers_read = []
-        for value in k:
-            k_mers_read += [read[j:j + value] for j in range(0, len(read) - value + 1)]
-        documents.append(k_mers_read)
+    reads_str_chunk = [list(item) for item in np.array_split(reads, n_workers)]
+    chunks = [(reads_str_chunk[i], k) for i in range(n_workers)]
+    pool = Pool(processes=n_workers)
+
+    result = pool.starmap(create_document, chunks)
+    for item in result:
+        documents += item
     t2 = time.time()
     logging.info("Finished create document in %f (s)." % (t2 - t1))
     return dictionary, documents
