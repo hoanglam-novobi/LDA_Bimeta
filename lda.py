@@ -34,7 +34,6 @@ def extract_k_mers(sequence, k):
     return res
 
 
-@profile
 def create_document(reads, k=[]):
     """
     Create a set of document from reads, consist of all k-mer in each read
@@ -51,12 +50,6 @@ def create_document(reads, k=[]):
     :param k: list of int
     :return: list of str
     """
-    t1 = time.time()
-    # create k-mer dictionary
-    k_mers_set = [genkmers(val) for val in k]
-    logging.info("Creating k-mers dictionary ...")
-    dictionary = corpora.Dictionary(k_mers_set)
-
     # create a set of document
     documents = []
     for read in reads:
@@ -64,9 +57,7 @@ def create_document(reads, k=[]):
         for value in k:
             k_mers_read += [read[j:j + value] for j in range(0, len(read) - value + 1)]
         documents.append(k_mers_read)
-    t2 = time.time()
-    logging.info("Finished create document in %f (s)." % (t2 - t1))
-    return dictionary, documents
+    return documents
 
 
 def save_documents(documents, file_path):
