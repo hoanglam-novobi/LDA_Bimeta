@@ -38,12 +38,12 @@ if __name__ == "__main__":
     n_workers = ''
     is_tfidf = False
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:tfidf:')
+        opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:')
     except getopt.GetoptError:
         print("Example for command line.")
         print(
             "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers>")
-        print("main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -tfidf 1")
+        print("main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1")
         sys.exit(2)
 
     for opt, arg in opts:
@@ -52,7 +52,7 @@ if __name__ == "__main__":
             print(
                 "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers>")
             print(
-                "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -tfidf 1")
+                "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1")
             sys.exit()
         elif opt == '-o':
             OUTPUT_DIR = arg
@@ -70,8 +70,8 @@ if __name__ == "__main__":
             n_passes = int(arg)
         elif opt == '-j':
             n_workers = int(arg)
-        elif opt == '-tfidf':
-            is_tfidf = True if is_tfidf == '1' else False
+        elif opt == '-c':
+            is_tfidf = True if arg == '1' else False
 
     ##############
     extension_file = '.fna'
