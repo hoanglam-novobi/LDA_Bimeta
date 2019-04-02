@@ -156,7 +156,7 @@ if __name__ == "__main__":
         ##########################################
         # CLUSTERING WITH LDA + BIMETA
         ##########################################
-        lda_bimeta_predictions = do_kmeans(top_dist, seeds=seeds, n_clusters=n_clusters)
+        lda_bimeta_predictions = do_kmeans(top_dist, seeds=seeds, n_clusters=n_clusters, n_workers=n_workers)
 
         logging.info("Save LDA + Bimeta clustering result to csv file into %s ." % OUTPUT_DIR)
         lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
@@ -165,8 +165,7 @@ if __name__ == "__main__":
         ##########################################
         # EVALUATE THE RESULT
         ##########################################
-        lda_bimeta_prec, lda_bimeta_recall = evalQuality(labels, lda_bimeta_predictions,
-                                                         n_clusters=n_clusters, n_workers=n_workers)
+        lda_bimeta_prec, lda_bimeta_recall = evalQuality(labels, lda_bimeta_predictions, n_clusters=n_clusters)
         logging.info("Clustering result of %s with LDA + Bimeta: Prec = %f ; Recall = %f ." % (
             name, lda_bimeta_prec, lda_bimeta_recall))
 
