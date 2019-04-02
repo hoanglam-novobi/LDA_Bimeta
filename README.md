@@ -10,3 +10,15 @@ Example for runscript
 In the server
 
 python3.6 main.py -o /home/student/data/lthoang/LDABimeta_output/ -d /home/student/data/dataset/ -b /home/student/data/Bimeta/Bimeta/output/ -i R4 -k [4] -n 10 -p 15 -j 40 -c 1
+
+To run in background:
+nohup <your command> &
+Example:
+nohup python3.6 main.py -o /home/student/data/lthoang/LDABimeta_output/ -d /home/student/data/dataset/ -b /home/student/data/Bimeta/Bimeta/output/ -i R4 -k [4] -n 10 -p 15 -j 40 -c 1 &
+
+To kill process in background:
+pkill -f <a part of the name of the process>
+
+Example:
+pkill -f "python3.6 main.py -o"
+  
