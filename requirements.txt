@@ -1,3 +1,4 @@
+cmake
 memory-profiler
 MulticoreTSNE
 networkx
@@ -11,6 +12,6 @@ scipy
 sklearn
 tensorflow
 virtualenv
-multiprocessing
+multiprocess
 gensim
 biopython
