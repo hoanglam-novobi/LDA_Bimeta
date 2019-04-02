@@ -11,7 +11,7 @@ from gensim import corpora
 from gensim.models.ldamodel import LdaModel
 from gensim.models.ldamulticore import LdaMulticore
 from gensim.models.tfidfmodel import TfidfModel
-from multiprocessing import Pool
+from multiprocessing import Pool, Array, Value
 
 # CONFIG FOR LOGGING MEMORY_PROFILER
 import sys
@@ -91,8 +91,13 @@ def parallel_create_document(reads, k=[], n_workers=2):
     logging.info("Creating k-mers dictionary ...")
     dictionary = corpora.Dictionary(k_mers_set)
 
+    splited_reads = np.array_split(reads, n_workers)
     pool = Pool(n_workers)
-    pool.apply()
+
+    for group in splited_reads:
+        for value in k:
+            pool.apply_async(create_document, args=(group, value))
+
 
     # create a set of document
     documents = []

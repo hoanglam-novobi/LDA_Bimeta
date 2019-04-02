@@ -8,7 +8,7 @@ import numpy as np
 
 from read_fasta import read_fasta_file, create_labels
 from lda import create_document, create_corpus, do_LDA, getDocTopicDist
-from kmeans import do_kmeans, evalQualityCluster, parallel_evalQualityCluster
+from kmeans import do_kmeans, evalQuality
 from bimeta import read_bimeta_input, create_characteristic_vector
 
 # LOGGING
@@ -43,7 +43,8 @@ if __name__ == "__main__":
         print("Example for command line.")
         print(
             "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers>")
-        print("main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1")
+        print(
+            "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1")
         sys.exit(2)
 
     for opt, arg in opts:
@@ -128,8 +129,8 @@ if __name__ == "__main__":
     ##########################################
     # EVALUATE THE RESULT
     ##########################################
-    lda_prec, lda_recall = parallel_evalQualityCluster(labels, lda_predictions, n_clusters=n_clusters,
-                                                       n_workers=n_workers)
+    lda_prec, lda_recall = evalQuality(labels, lda_predictions, n_clusters=n_clusters,
+                                       n_workers=n_workers)
     logging.info("Clustering result of %s with LDA: Prec = %f ; Recall = %f ." % (name, lda_prec, lda_recall))
 
     ##########################################
@@ -147,8 +148,8 @@ if __name__ == "__main__":
     ##########################################
     # EVALUATE THE RESULT
     ##########################################
-    lda_bimeta_prec, lda_bimeta_recall = parallel_evalQualityCluster(labels, lda_bimeta_predictions,
-                                                                     n_clusters=n_clusters, n_workers=n_workers)
+    lda_bimeta_prec, lda_bimeta_recall = evalQuality(labels, lda_bimeta_predictions,
+                                                     n_clusters=n_clusters, n_workers=n_workers)
     logging.info("Clustering result of %s with LDA + Bimeta: Prec = %f ; Recall = %f ." % (
         name, lda_bimeta_prec, lda_bimeta_recall))
 
