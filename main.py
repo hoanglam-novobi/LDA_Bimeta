@@ -57,7 +57,6 @@ if __name__ == "__main__":
             print(
                 "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1 -smartirs nfn")
             sys.exit(2)
-            pass
 
         for opt, arg in opts:
             if opt == '-h':
@@ -186,6 +185,6 @@ if __name__ == "__main__":
         t2 = time.time()
         logging.info("Total time of programe: %f ." % (t2-t1))
         logging.info("++++++++++++++++++++ END ++++++++++++++++++++++")
-    except Exception as e:
-        logging.error(e)
+    except Exception:
+        logging.exception("Exception occurred.", exc_info=True)
         raise
