@@ -47,15 +47,16 @@ if __name__ == "__main__":
         n_workers = ''
         is_tfidf = False
         smartirs = None
+        is_seed = True
 
         try:
-            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:w:')
+            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:w:s:')
         except getopt.GetoptError:
             print("Example for command line.")
             print(
-                "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers> -c <is_tfidf> -w <localW, globalW>")
+                "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers> -c <is_tfidf> -w <localW, globalW> -s <seeds or groups>")
             print(
-                "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1 -w nfn")
+                "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1 -w nfn -s 1")
             sys.exit(2)
 
         for opt, arg in opts:
@@ -86,6 +87,9 @@ if __name__ == "__main__":
                 is_tfidf = True if arg == '1' else False
             elif opt == '-w':
                 smartirs = arg if arg else None
+            elif opt == '-s':
+                is_seed = True if arg == '1' else False
+
 
         ##############
         extension_file = '.fna'
@@ -160,7 +164,7 @@ if __name__ == "__main__":
         ##########################################
         # LDA + Bimeta
         ##########################################
-        bimeta_extensions = '.fna.seeds.txt'
+        bimeta_extensions = '.fna.seeds.txt' if is_seed else '.fna.groups.txt'
         seeds_dict = read_bimeta_input(BIMETA_INPUT, name + bimeta_extensions)
         seeds = create_characteristic_vector(top_dist, seeds_dict)
 
