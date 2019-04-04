@@ -49,22 +49,22 @@ if __name__ == "__main__":
         smartirs = None
 
         try:
-            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:smartirs:')
+            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:w:')
         except getopt.GetoptError:
             print("Example for command line.")
             print(
-                "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers> -c <is_tfidf> -smartirs <localW, globalW>")
+                "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers> -c <is_tfidf> -w <localW, globalW>")
             print(
-                "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1 -smartirs nfn")
+                "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1 -w nfn")
             sys.exit(2)
 
         for opt, arg in opts:
             if opt == '-h':
                 print("Example for command line.")
                 print(
-                    "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers> -c <is_tfidf> -smartirs <localW, globalW>")
+                    "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers> -c <is_tfidf> -w <localW, globalW>")
                 print(
-                    "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1 -smartirs nfn")
+                    "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1 -w nfn")
                 sys.exit()
             elif opt == '-o':
                 OUTPUT_DIR = arg
@@ -84,8 +84,8 @@ if __name__ == "__main__":
                 n_workers = int(arg)
             elif opt == '-c':
                 is_tfidf = True if arg == '1' else False
-            elif opt == '-smartirs' and arg:
-                smartirs = arg
+            elif opt == '-w':
+                smartirs = arg if arg else None
 
         ##############
         extension_file = '.fna'
