@@ -110,7 +110,7 @@ if __name__ == "__main__":
         dictionary.save(OUTPUT_DIR + 'dictionary-k%s.gensim' % (''.join(str(val) for val in k)))
 
         # if you want to create corpus with TFIDF, set it is True
-        corpus = create_corpus(dictionary, documents, is_tfidf=is_tfidf)
+        corpus = create_corpus(dictionary, documents, is_tfidf=is_tfidf, smartirs=smartirs)
         # logging.info("Saving documents as .txt file for using later into %s ." % OUTPUT_DIR)
         # save_documents(documents, OUTPUT_DIR + 'documents.txt')
         logging.info("Deleting documents for saving memory ...")
@@ -151,6 +151,10 @@ if __name__ == "__main__":
         # EVALUATE THE RESULT
         ##########################################
         lda_prec, lda_recall = evalQuality(labels, lda_predictions, n_clusters=n_clusters)
+        lda_res = np.array([lda_prec, lda_recall])
+
+        # save the cluster result into .txt file
+        np.savetxt(OUTPUT_DIR + name + "prec_recall_LDA.txt", lda_res, fmt="%.4f", delimiter=",")
         logging.info("Clustering result of %s with LDA: Prec = %f ; Recall = %f ." % (name, lda_prec, lda_recall))
 
         ##########################################
@@ -173,6 +177,9 @@ if __name__ == "__main__":
         # EVALUATE THE RESULT
         ##########################################
         lda_bimeta_prec, lda_bimeta_recall = evalQuality(labels, lda_bimeta_predictions, n_clusters=n_clusters)
+        lda_bimeta_res = np.array([lda_bimeta_prec, lda_bimeta_recall])
+        # save the cluster result into .txt file
+        np.savetxt(OUTPUT_DIR + name + "prec_recall_LDA_Bimeta.txt", lda_bimeta_res, fmt="%.4f", delimiter=",")
         logging.info("Clustering result of %s with LDA + Bimeta: Prec = %f ; Recall = %f ." % (
             name, lda_bimeta_prec, lda_bimeta_recall))
         t2 = time.time()
