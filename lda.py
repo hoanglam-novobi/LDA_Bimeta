@@ -12,6 +12,7 @@ from gensim.models.ldamodel import LdaModel
 from gensim.models.ldamulticore import LdaMulticore
 from gensim.models.tfidfmodel import TfidfModel
 from multiprocessing import Pool, Array, Value
+from gensim.models.wrappers import LdaMallet
 
 # CONFIG FOR LOGGING MEMORY_PROFILER
 import sys
@@ -151,6 +152,29 @@ def do_LDA(corpus, dictionary, n_topics=10, n_worker=2, n_passes=15, max_iters=2
                              iterations=max_iters)
     t2 = time.time()
     logging.info("Finished training LDA model in %f (s)." % (t2 - t1))
+    return lda_model
+
+
+@profile
+def do_LDA_Mallet(path_to_mallet_binary, corpus, dictionary, n_topics=10, n_worker=2):
+    """
+    A wapper of LDA Mallet
+    If the program is run out of memory, you should try to use LDA or LDA LdaMulticore
+    :param corpus:
+    :param dictionary:
+    :param n_topics:
+    :param n_worker:
+    :param n_passes:
+    :param max_iters:
+    :return:
+    """
+    t1 = time.time()
+    # training LDA model
+    lda_model = LdaMallet(mallet_path=path_to_mallet_binary,
+                          corpus=corpus, id2word=dictionary, num_topics=n_topics, workers=n_worker,
+                          optimize_interval=10)
+    t2 = time.time()
+    logging.info("Finished training LDA Mallet model in %f (s)." % (t2 - t1))
     return lda_model
 
 

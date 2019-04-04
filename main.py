@@ -8,7 +8,8 @@ import numpy as np
 import pandas as pd
 
 from read_fasta import read_fasta_file, create_labels
-from lda import create_document, create_corpus, do_LDA, getDocTopicDist, save_documents, parallel_create_document
+from lda import create_document, create_corpus, do_LDA, do_LDA_Mallet, getDocTopicDist, save_documents, \
+    parallel_create_document
 from kmeans import do_kmeans, evalQuality
 from bimeta import read_bimeta_input, create_characteristic_vector
 
@@ -48,9 +49,10 @@ if __name__ == "__main__":
         is_tfidf = False
         smartirs = None
         is_seed = True
+        run_with_LDAMallet = False
 
         try:
-            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:w:s:')
+            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:w:s:m:')
         except getopt.GetoptError:
             print("Example for command line.")
             print(
@@ -89,8 +91,8 @@ if __name__ == "__main__":
                 smartirs = arg if arg else None
             elif opt == '-s':
                 is_seed = True if arg == '1' else False
-
-
+            elif opt == '-m':
+                run_with_LDAMallet = True if arg == '1' else False
         ##############
         extension_file = '.fna'
         file_name = name + extension_file
@@ -124,22 +126,30 @@ if __name__ == "__main__":
         pickle.dump(corpus, open(OUTPUT_DIR + corpus_name, 'wb'))
 
         ##########################################
-        # CREATE LDA MODEL
+        # CREATE LDA MODEL IN GENSIM
         ##########################################
-        lda_model = do_LDA(corpus, dictionary, n_worker=n_workers, n_topics=n_topics, n_passes=n_passes)
+        if run_with_LDAMallet:
+            # DON'T EDIT THIS PATH
+            path_to_lda_mallet = "/home/student/data/Mallet/bin/mallet"
+            lda_model = do_LDA_Mallet(path_to_lda_mallet, corpus=corpus, dictionary=dictionary, n_topics=n_topics,
+                                      n_worker=n_workers)
+        else:
+            lda_model = do_LDA(corpus, dictionary, n_worker=n_workers, n_topics=n_topics, n_passes=n_passes)
+
         logging.info("Saving LDA model into %s." % OUTPUT_DIR)
         lda_model.save(OUTPUT_DIR + 'model-lda.gensim')
 
         # get topic distribution
         top_dist, lda_keys = getDocTopicDist(lda_model, corpus, True)
+        logging.info("Shape of topic distribution: %s ", str(top_dist.shape))
         logging.info("Deleting reads for saving memory ...")
         del corpus
         logging.info("Saving topic distribution into %s." % OUTPUT_DIR)
         np.savetxt(OUTPUT_DIR + name + "top_dist.csv", top_dist, fmt='%.5e', delimiter=",",
                    header=','.join([str(i) for i in range(n_topics)]))
-        logging.info("Get topic distribution from LDA model in gensim.")
-        np.savetxt(OUTPUT_DIR + name + "top_dist_from_gensim.csv", lda_model.get_topics().T, fmt='%.5e', delimiter=",",
-                   header=','.join([str(i) for i in range(n_topics)]))
+        # logging.info("Get topic distribution from LDA model in gensim.")
+        # np.savetxt(OUTPUT_DIR + name + "top_dist_from_gensim.csv", lda_model.get_topics().T, fmt='%.5e', delimiter=",",
+        #            header=','.join([str(i) for i in range(n_topics)]))
         ##########################################
         # CLUSTERING WITH LDA
         ##########################################
@@ -187,7 +197,7 @@ if __name__ == "__main__":
         logging.info("Clustering result of %s with LDA + Bimeta: Prec = %f ; Recall = %f ." % (
             name, lda_bimeta_prec, lda_bimeta_recall))
         t2 = time.time()
-        logging.info("Total time of programe: %f ." % (t2-t1))
+        logging.info("Total time of programe: %f ." % (t2 - t1))
         logging.info("++++++++++++++++++++ END ++++++++++++++++++++++")
     except Exception:
         logging.exception("Exception occurred.", exc_info=True)
