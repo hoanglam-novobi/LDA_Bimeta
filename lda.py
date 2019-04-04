@@ -104,13 +104,13 @@ def parallel_create_document(reads, k=[], n_workers=2):
 
 
 @profile
-def create_corpus(dictionary, documents, is_tfidf=False):
+def create_corpus(dictionary, documents, is_tfidf=False, smartirs=None):
     logging.info("Creating corpus ...")
     t1 = time.time()
-    corpus = [dictionary.doc2bow(d) for d in documents]
+    corpus = [dictionary.doc2bow(d, allow_update=True) for d in documents]
     if is_tfidf:
         logging.info("Creating corpus with TFIDF ...")
-        tfidf = TfidfModel(corpus)
+        tfidf = TfidfModel(corpus=corpus, smartirs=smartirs)
         corpus = tfidf[corpus]
     t2 = time.time()
     logging.info("Finished creating corpus in %f (s)." % (t2 - t1))

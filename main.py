@@ -27,6 +27,7 @@ def create_prediction_df(actual, prediction):
 if __name__ == "__main__":
     try:
         logging.info("++++++++++++++++++++ START ++++++++++++++++++++")
+        t1 = time.time()
         n_arguments = len(sys.argv)
         logging.info("Number of arguments: %d ." % n_arguments)
         logging.info("Argument list: %s ." % str(sys.argv))
@@ -45,23 +46,25 @@ if __name__ == "__main__":
         data_path = ''
         n_workers = ''
         is_tfidf = False
+        smartirs = None
+
         try:
             opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:')
         except getopt.GetoptError:
             print("Example for command line.")
             print(
-                "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers>")
+                "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers> -c <is_tfidf> -smartirs <localW, globalW>")
             print(
-                "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1")
+                "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1 -smartirs nfn")
             sys.exit(2)
 
         for opt, arg in opts:
             if opt == '-h':
                 print("Example for command line.")
                 print(
-                    "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers>")
+                    "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers> -c <is_tfidf> -smartirs <localW, globalW>")
                 print(
-                    "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1")
+                    "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1 -smartirs nfn")
                 sys.exit()
             elif opt == '-o':
                 OUTPUT_DIR = arg
@@ -81,6 +84,8 @@ if __name__ == "__main__":
                 n_workers = int(arg)
             elif opt == '-c':
                 is_tfidf = True if arg == '1' else False
+            elif opt == '-smartirs' and arg:
+                smartirs = arg
 
         ##############
         extension_file = '.fna'
@@ -128,7 +133,9 @@ if __name__ == "__main__":
         logging.info("Saving topic distribution into %s." % OUTPUT_DIR)
         np.savetxt(OUTPUT_DIR + name + "top_dist.csv", top_dist, fmt='%.5e', delimiter=",",
                    header=','.join([str(i) for i in range(n_topics)]))
-
+        logging.info("Get topic distribution from LDA model in gensim.")
+        np.savetxt(OUTPUT_DIR + name + "top_dist_from_gensim.csv", lda_model.get_topics().T, fmt='%.5e', delimiter=",",
+                   header=','.join([str(i) for i in range(n_topics)]))
         ##########################################
         # CLUSTERING WITH LDA
         ##########################################
@@ -168,7 +175,8 @@ if __name__ == "__main__":
         lda_bimeta_prec, lda_bimeta_recall = evalQuality(labels, lda_bimeta_predictions, n_clusters=n_clusters)
         logging.info("Clustering result of %s with LDA + Bimeta: Prec = %f ; Recall = %f ." % (
             name, lda_bimeta_prec, lda_bimeta_recall))
-
+        t2 = time.time()
+        logging.info("Total time of programe: %f ." % (t2-t1))
         logging.info("++++++++++++++++++++ END ++++++++++++++++++++++")
     except Exception as e:
         logging.error(e)
