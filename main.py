@@ -49,7 +49,7 @@ if __name__ == "__main__":
         smartirs = None
 
         try:
-            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:')
+            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:smartirs:')
         except getopt.GetoptError:
             print("Example for command line.")
             print(
@@ -57,6 +57,7 @@ if __name__ == "__main__":
             print(
                 "main.py -o ../output_dir/ -d ../input_dir/ -b ../bimeta_output/ -i R4 -k [3, 4, 5] -n 10 -p 15 -j 40 -c 1 -smartirs nfn")
             sys.exit(2)
+            pass
 
         for opt, arg in opts:
             if opt == '-h':
