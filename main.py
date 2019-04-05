@@ -133,16 +133,16 @@ if __name__ == "__main__":
         if run_with_LDAMallet:
             # DON'T EDIT THIS PATH
             path_to_lda_mallet = "/home/student/data/Mallet/bin/mallet"
-            lda_model = do_LDA_Mallet(path_to_lda_mallet, corpus=corpus, dictionary=dictionary, n_topics=n_topics,
+            lda_model = do_LDA_Mallet(path_to_lda_mallet, corpus=mmcorpus, dictionary=dictionary, n_topics=n_topics,
                                       n_worker=n_workers)
         else:
-            lda_model = do_LDA(corpus, dictionary, n_worker=n_workers, n_topics=n_topics, n_passes=n_passes)
+            lda_model = do_LDA(mmcorpus, dictionary, n_worker=n_workers, n_topics=n_topics, n_passes=n_passes)
 
         logging.info("Saving LDA model into %s." % OUTPUT_DIR)
         lda_model.save(OUTPUT_DIR + 'model-lda.gensim')
 
         # get topic distribution
-        top_dist, lda_keys = getDocTopicDist(lda_model, corpus, True)
+        top_dist, lda_keys = getDocTopicDist(lda_model, mmcorpus, True)
         logging.info("Shape of topic distribution: %s ", str(top_dist.shape))
         logging.info("Deleting reads for saving memory ...")
         del corpus
