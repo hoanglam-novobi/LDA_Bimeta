@@ -150,9 +150,7 @@ if __name__ == "__main__":
         logging.info("Saving topic distribution into %s." % OUTPUT_DIR)
         np.savetxt(OUTPUT_DIR + name + "top_dist.csv", top_dist, fmt='%.5e', delimiter=",",
                    header=','.join([str(i) for i in range(n_topics)]))
-        # logging.info("Get topic distribution from LDA model in gensim.")
-        # np.savetxt(OUTPUT_DIR + name + "top_dist_from_gensim.csv", lda_model.get_topics().T, fmt='%.5e', delimiter=",",
-        #            header=','.join([str(i) for i in range(n_topics)]))
+        t2 = time.time()
         ##########################################
         # CLUSTERING WITH LDA
         ##########################################
@@ -173,7 +171,7 @@ if __name__ == "__main__":
         # save the cluster result into .txt file
         np.savetxt(OUTPUT_DIR + name + "prec_recall_LDA.txt", lda_res, fmt="%.4f", delimiter=",")
         logging.info("Clustering result of %s with LDA: Prec = %f ; Recall = %f ." % (name, lda_prec, lda_recall))
-
+        t3 = time.time()
         ##########################################
         # LDA + Bimeta
         ##########################################
@@ -199,8 +197,17 @@ if __name__ == "__main__":
         np.savetxt(OUTPUT_DIR + name + "prec_recall_LDA_Bimeta.txt", lda_bimeta_res, fmt="%.4f", delimiter=",")
         logging.info("Clustering result of %s with LDA + Bimeta: Prec = %f ; Recall = %f ." % (
             name, lda_bimeta_prec, lda_bimeta_recall))
-        t2 = time.time()
+        t4 = time.time()
         logging.info("Total time of programe: %f ." % (t2 - t1))
+        logging.info("Save running times.")
+        with open(OUTPUT_DIR + "running_times.txt", 'w') as f:
+            lines = [
+                "Running time of LDA: %f" % (t3 - t1),
+                "Running time of LDA + Bimeta: %f" % (t2 - t1 + t4 - t3)
+            ]
+            for line in lines:
+                f.writelines(line)
+                f.write("\n")
         logging.info("++++++++++++++++++++ END ++++++++++++++++++++++")
     except Exception:
         logging.exception("Exception occurred.", exc_info=True)
