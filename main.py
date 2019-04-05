@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 from read_fasta import read_fasta_file, create_labels
-from lda import create_document, create_corpus, do_LDA, do_LDA_Mallet, getDocTopicDist, save_documents, \
+from lda import create_document, create_corpus, do_LDA, do_LDA_Mallet, getDocTopicDist_mp, save_documents, \
     parallel_create_document, serializeCorpus
 from kmeans import do_kmeans, evalQuality
 from bimeta import read_bimeta_input, create_characteristic_vector
@@ -142,7 +142,8 @@ if __name__ == "__main__":
         lda_model.save(OUTPUT_DIR + 'model-lda.gensim')
 
         # get topic distribution
-        top_dist, lda_keys = getDocTopicDist(lda_model, mmcorpus, True)
+        top_dist, lda_keys = getDocTopicDist_mp(model=lda_model, corpus=mmcorpus, n_workers=n_workers,
+                                                n_topics=n_topics)
         logging.info("Shape of topic distribution: %s ", str(top_dist.shape))
         logging.info("Deleting reads for saving memory ...")
         del corpus

@@ -159,6 +159,22 @@ def getDocTopicDist(model, corpus, kwords=False, n_topics=10):
 
 
 @profile
+def getDocTopicDist_mp(model, corpus, n_topics=10, kwords=False, n_workers=20):
+    top_dist = []
+    keys = []
+    corpus_chunk = [list(item) for item in np.array_split(corpus, n_workers)]
+    chunks = [(model, corpus_chunk[i], n_topics, True) for i in range(n_workers)]
+    pool = Pool(processes=n_workers)
+
+    result = pool.starmap(getDocTopicDist, chunks)
+
+    for item in result:
+        top_dist += item[0]
+        keys += item[1]
+    return np.array(top_dist), keys
+
+
+@profile
 def do_LDA(corpus, dictionary, n_topics=10, n_worker=2, n_passes=15, max_iters=200):
     t1 = time.time()
     # training LDA model
