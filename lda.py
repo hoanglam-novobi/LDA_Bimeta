@@ -132,20 +132,14 @@ def serializeCorpus(corpus_tfidf, dump_path, file_name):
     return serialize_corpus_tfidf
 
 
-@profile
-def getDocTopicDist(model, corpus, kwords=False, n_topics=10):
+def getDocTopicDist(model, corpus, n_topics, kwords=False):
     """
     LDA transformation, for each doc only returns topics with non-zero weight
     This function makes a matrix transformation of docs in the topic space.
-    :param model: LDA model object
-    :param corpus:
-    :param kwords:
-    :return:
     """
-    t1 = time.time()
     top_dist = []
     keys = []
-    logging.info("Getting topic distribution ...")
+
     for d in corpus:
         tmp = {i: 0 for i in range(n_topics)}
         tmp.update(dict(model[d]))
@@ -153,9 +147,8 @@ def getDocTopicDist(model, corpus, kwords=False, n_topics=10):
         top_dist += [np.array(vals)]
         if kwords:
             keys += [np.array(vals).argmax()]
-    t2 = time.time()
-    logging.info("Finished get topic distribution in %f (s)." % (t2 - t1))
-    return np.array(top_dist), keys
+    return top_dist, keys
+
 
 
 @profile
