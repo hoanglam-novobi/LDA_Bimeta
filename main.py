@@ -9,7 +9,7 @@ import pandas as pd
 
 from read_fasta import read_fasta_file, create_labels
 from lda import create_document, create_corpus, do_LDA, do_LDA_Mallet, getDocTopicDist, save_documents, \
-    parallel_create_document
+    parallel_create_document, serializeCorpus
 from kmeans import do_kmeans, evalQuality
 from bimeta import read_bimeta_input, create_characteristic_vector
 
@@ -117,6 +117,8 @@ if __name__ == "__main__":
 
         # if you want to create corpus with TFIDF, set it is True
         corpus = create_corpus(dictionary, documents, is_tfidf=is_tfidf, smartirs=smartirs)
+        # corpus_tfidf, dump_path, file_name
+        mmcorpus = serializeCorpus(corpus_tfidf=corpus, dump_path=OUTPUT_DIR, file_name=file_name)
         # logging.info("Saving documents as .txt file for using later into %s ." % OUTPUT_DIR)
         # save_documents(documents, OUTPUT_DIR + 'documents.txt')
         logging.info("Deleting documents for saving memory ...")

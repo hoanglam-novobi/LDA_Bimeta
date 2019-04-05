@@ -13,6 +13,7 @@ from gensim.models.ldamulticore import LdaMulticore
 from gensim.models.tfidfmodel import TfidfModel
 from multiprocessing import Pool, Array, Value
 from gensim.models.wrappers import LdaMallet
+from gensim.test.utils import get_tmpfile
 
 # CONFIG FOR LOGGING MEMORY_PROFILER
 import sys
@@ -116,6 +117,19 @@ def create_corpus(dictionary, documents, is_tfidf=False, smartirs=None):
     t2 = time.time()
     logging.info("Finished creating corpus in %f (s)." % (t2 - t1))
     return corpus
+
+
+@profile
+def serializeCorpus(corpus_tfidf, dump_path, file_name):
+    logging.info("Seriallize and creating Mmcorpus")
+    t1 = time.time()
+    output_fname = get_tmpfile(dump_path + 'corpus-tfidf-%s.mm' % file_name)
+    gensim.corpora.mmcorpus.MmCorpus.serialize(output_fname, corpus_tfidf)
+
+    serialize_corpus_tfidf = corpora.MmCorpus(output_fname)
+    t2 = time.time()
+    logging.info("Finished creating Mmcorpus in %f (s)." % (t2 - t1))
+    return serialize_corpus_tfidf
 
 
 @profile
