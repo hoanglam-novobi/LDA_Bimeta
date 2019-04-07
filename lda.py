@@ -8,6 +8,7 @@ import multiprocessing as mp
 
 from collections import OrderedDict
 from gensim import corpora
+from gensim.models import LogEntropyModel
 from gensim.models.ldamodel import LdaModel
 from gensim.models.ldamulticore import LdaMulticore
 from gensim.models.tfidfmodel import TfidfModel
@@ -106,14 +107,19 @@ def parallel_create_document(reads, k=[], n_workers=2):
 
 
 @profile
-def create_corpus(dictionary, documents, is_tfidf=False, smartirs=None):
-    logging.info("Creating corpus ...")
+def create_corpus(dictionary, documents, is_tfidf=False, smartirs=None, is_log_entropy=False, is_normalize=True):
+    logging.info("Creating BoW corpus ...")
     t1 = time.time()
     corpus = [dictionary.doc2bow(d, allow_update=True) for d in documents]
     if is_tfidf:
         logging.info("Creating corpus with TFIDF ...")
         tfidf = TfidfModel(corpus=corpus, smartirs=smartirs)
         corpus = tfidf[corpus]
+    elif is_log_entropy:
+        logging.info("Creating corpus with Log Entropy ...")
+        log_entropy_model = LogEntropyModel(corpus, normalize=is_normalize)
+        corpus = log_entropy_model[corpus]
+
     t2 = time.time()
     logging.info("Finished creating corpus in %f (s)." % (t2 - t1))
     return corpus
