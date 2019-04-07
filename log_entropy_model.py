@@ -110,10 +110,12 @@ if __name__ == "__main__":
         corpus_name = 'corpus-tfidf.pkl' if is_tfidf else 'corpus.pkl'
         bow_corpus = load_corpus(OUTPUT_DIR, corpus_name)
 
-        # fit model
-        log_entropy_model = LogEntropyModel(bow_corpus, normalize=True)
+        mmcorpus = serializeCorpus(corpus_tfidf=bow_corpus, dump_path=OUTPUT_DIR, file_name=file_name)
 
-        log_entropy_corpus = log_entropy_model[bow_corpus]
+        # fit model
+        log_entropy_model = LogEntropyModel(mmcorpus, normalize=True)
+
+        log_entropy_corpus = log_entropy_model[mmcorpus]
 
         lda_model = do_LDA(log_entropy_corpus, dictionary, n_worker=n_workers, n_topics=n_topics, n_passes=n_passes)
 
