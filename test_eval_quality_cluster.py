@@ -1,6 +1,7 @@
 import time
 import numpy as np
 import pandas as pd
+from pprint import pprint
 
 from sklearn.metrics import confusion_matrix
 
@@ -39,8 +40,8 @@ def create_labels(name):
 
 # load dataset
 DATA_DIR = 'D:/HOCTAP/HK182/Luanvantotnghiep/sourcecode/dataset/'
-lda_prediction_data = pd.read_csv(DATA_DIR + 'R4lda_prediction_result.csv')
-lda_bimeta_prediction_data = pd.read_csv(DATA_DIR + 'R4lda_bimeta_prediction_result.csv')
+lda_prediction_data = pd.read_csv(DATA_DIR + 'R1lda_prediction_result.csv')
+lda_bimeta_prediction_data = pd.read_csv(DATA_DIR + 'R1lda_bimeta_prediction_result.csv')
 
 # convert to df
 lda_bimeta_prediction_df = pd.DataFrame(lda_bimeta_prediction_data)
@@ -55,3 +56,49 @@ print("LDA: Prec = %f ; Recall = %f ." % (lda_prec, lda_recall))
 
 lda_bimeta_prec, lda_bimeta_recall = evalQuality(actual, lda_bimeta_predictions)
 print("LDA + Bimeta: Prec = %f ; Recall = %f ." % (lda_bimeta_prec, lda_bimeta_recall))
+
+
+# test read seeds and groups file
+
+def read_bimeta_input(path, file_name):
+    res = {}
+    with open(path + file_name, 'r') as f:
+        for row_id, line in enumerate(f):
+            if line.rstrip():
+                line = line.rstrip().split(',')
+                if len(line) < 1:
+                    continue
+                res[row_id] = [int(read_id) - 1 for read_id in line]
+            else:
+                res[row_id] = []
+
+    return res
+
+
+groupids = read_bimeta_input(DATA_DIR, 'S2.fna.groups.txt')
+seedids = read_bimeta_input(DATA_DIR, 'S2.fna.seeds.txt')
+
+print("Length seedids: ", len(seedids))
+print("Length groupids: ", len(groupids))
+
+groups = {}
+
+for key in groupids:
+    groups[key] = groupids[key] + seedids[key]
+
+print("Length groups: ", len(groups))
+print("Length groups[0]: ", len(groups[0]))
+print(sorted(groups[0]))
+
+n_reads = 0
+for item, value in groups.items():
+    n_reads += len(value)
+
+print("Number of reads in groups: ", n_reads)
+
+# create groupvectors by compute mean vector using topic_distribution
+# length of groupvectors should be 4306
+
+# convert to dataframe with the number of column is the topic in LDA model
+
+# using kmean to cluster the mean vector

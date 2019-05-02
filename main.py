@@ -177,14 +177,24 @@ if __name__ == "__main__":
         ##########################################
         # LDA + Bimeta
         ##########################################
-        bimeta_extensions = '.fna.seeds.txt' if is_seed else '.fna.groups.txt'
-        seeds_dict = read_bimeta_input(BIMETA_INPUT, name + bimeta_extensions)
-        seeds = create_characteristic_vector(top_dist, seeds_dict)
+
+        # read all reads in groups file, each row is a group. Note: it can be empty
+        groupids = read_bimeta_input(BIMETA_INPUT, name + '.fna.groups.txt')
+        # read all read in seeds file, each row is a group
+        seedids = read_bimeta_input(BIMETA_INPUT, name + '.fna.seeds.txt')
+
+        # combine groupids and seedids to groups
+        groups = {}
+
+        for key in groupids:
+            groups[key] = groupids[key] + seedids[key]
+
+        groupvectors = create_characteristic_vector(top_dist, groups)
 
         ##########################################
         # CLUSTERING WITH LDA + BIMETA
         ##########################################
-        lda_bimeta_predictions = do_kmeans(top_dist, seeds=seeds, seeds_dict=seeds_dict, n_clusters=n_clusters,
+        lda_bimeta_predictions = do_kmeans(top_dist, seeds=groupvectors, seeds_dict=groups, n_clusters=n_clusters,
                                            n_workers=n_workers)
 
         logging.info("Save LDA + Bimeta clustering result to csv file into %s ." % OUTPUT_DIR)

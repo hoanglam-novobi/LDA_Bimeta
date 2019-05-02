@@ -82,10 +82,13 @@ def read_bimeta_input(path, file_name):
     res = {}
     with open(path + file_name, 'r') as f:
         for row_id, line in enumerate(f):
-            line = line.split(',')
-            if len(line) <= 1:
-                continue
-            res[row_id] = [int(read_id) - 1 for read_id in line[1:]]
+            if line.rstrip():
+                line = line.rstrip().split(',')
+                if len(line) <= 1:
+                    continue
+                res[row_id] = [int(read_id) - 1 for read_id in line]
+            else:
+                res[row_id] = []
     t2 = time.time()
     logging.info("Finished read the result from phase 1 Bimeta in %f (s)." % (t2 - t1))
     return res
