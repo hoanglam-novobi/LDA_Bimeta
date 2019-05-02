@@ -21,6 +21,8 @@ logging.basicConfig(level=logging.INFO,
 
 
 def create_prediction_df(actual, prediction):
+    logging.info("Length actual", len(actual))
+    logging.info("Length prediction", len(prediction))
     df = pd.DataFrame({'actual': actual, 'prediction': prediction})
     return df
 

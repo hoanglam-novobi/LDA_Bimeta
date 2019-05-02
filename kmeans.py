@@ -63,9 +63,9 @@ def do_kmeans(top_dist, seeds=np.array([]), seeds_dict=None, n_clusters=2, n_wor
     kmeans = KMeans(n_clusters=n_clusters, n_jobs=n_workers, n_init=n_init, max_iter=iters)
 
     if seeds.size == 0:
-        predictions = kmeans.fit_predict(top_dist)
+        predictions = list(kmeans.fit_predict(top_dist))
     else:
-        seed_clusters = kmeans.fit_predict(seeds)
+        seed_clusters = list(kmeans.fit_predict(seeds))
         predictions = assign_cluster(mean_vector_clusters=seed_clusters, seeds=seeds_dict)
 
     t2 = time.time()

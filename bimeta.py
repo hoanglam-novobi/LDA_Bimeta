@@ -124,6 +124,7 @@ def assign_cluster(mean_vector_clusters, seeds):
     # sort dict by read_id
     sorted_dict = sorted(result.items(), key=lambda key: key[0])
     cluster_reads = [item[1] for item in sorted_dict]
+    logging.info("Length result: ", len(result))
     t2 = time.time()
     logging.info("Finished assign cluster for reads in seeds in %f (s)." % (t2 - t1))
     return cluster_reads
