@@ -1,27 +1,57 @@
 import time
-import multiprocessing as mp
 import numpy as np
+import pandas as pd
 
-from multiprocessing import Pool, Value, Array
-from kmeans import evalQualityCluster, parallel_evalQualityCluster
-from read_fasta import create_labels
+from sklearn.metrics import confusion_matrix
+
+actual_labels = {
+    'R1': [42189, 40771],
+    'R2': [38664, 38629],
+    'R3': [47457, 45810],
+    'R4': [16447, 18010],
+    'R5': [22027, 18016],
+    'R6': [27029, 43521],
+    'R7': [19473, 19291, 251709],
+    'S1': [44405, 51962],
+    'S2': [114177, 81162],
+    'S3': [89724, 249001],
+    'S4': [57260, 318042],
+    'S5': [114250, 81063, 130087],
+    'S6': [172675, 317955, 222758],
+    'S7': [141928, 75183, 126183, 588088, 722168]
+}
 
 
-def eval_quality(y_true, y_pred, low_idx, high_idx):
-    selected_ytrue = y_true[low_idx:high_idx]
-    selected_ypred = y_pred[low_idx:high_idx]
+def evalQuality(y_true, y_pred, n_clusters=2):
+    A = confusion_matrix(y_pred, y_true)
+    prec = sum([max(A[:, j]) for j in range(0, n_clusters)]) / sum([sum(A[i, :]) for i in range(0, n_clusters)])
+    rcal = sum([max(A[i, :]) for i in range(0, n_clusters)]) / sum([sum(A[i, :]) for i in range(0, n_clusters)])
+    return prec, rcal
 
 
-if __name__ == "__main__":
-    y_true, n_cluster = create_labels('R1')
-    print("Number of cluster: %d" % n_cluster)
-    size = len(y_true)
-    y_pred = np.random.randint(0, 2, size)
+def create_labels(name):
+    n_cluster = len(actual_labels[name])
+    labels = []
+    for idx, value in enumerate(actual_labels[name]):
+        labels += [idx] * value
+    return labels, n_cluster
 
-    t1 = time.time()
-    n_workers = 40
 
-    prec, recall = parallel_evalQualityCluster(y_true, y_pred, n_workers=n_workers, n_clusters=n_cluster)
+# load dataset
+DATA_DIR = 'D:/HOCTAP/HK182/Luanvantotnghiep/sourcecode/dataset/'
+lda_prediction_data = pd.read_csv(DATA_DIR + 'R4lda_prediction_result.csv')
+lda_bimeta_prediction_data = pd.read_csv(DATA_DIR + 'R4lda_bimeta_prediction_result.csv')
 
-    t2 = time.time()
-    print("Finised time in %f (s)" % (t2 - t1))
+# convert to df
+lda_bimeta_prediction_df = pd.DataFrame(lda_bimeta_prediction_data)
+lda_prediction_df = pd.DataFrame(lda_prediction_data)
+
+actual = lda_prediction_df['actual'].values
+lda_predictions = lda_prediction_df['prediction'].values
+lda_bimeta_predictions = lda_bimeta_prediction_df['prediction'].values
+
+lda_prec, lda_recall = evalQuality(actual, lda_predictions)
+print("LDA: Prec = %f ; Recall = %f ." % (lda_prec, lda_recall))
+
+lda_bimeta_prec, lda_bimeta_recall = evalQuality(actual, lda_bimeta_predictions)
+print("LDA + Bimeta: Prec = %f ; Recall = %f ." % (lda_bimeta_prec, lda_bimeta_recall))

@@ -11,7 +11,7 @@ from read_fasta import read_fasta_file, create_labels
 from lda import create_document, create_corpus, do_LDA, do_LDA_Mallet, getDocTopicDist_mp, save_documents, \
     parallel_create_document, serializeCorpus
 from kmeans import do_kmeans, evalQuality
-from bimeta import read_bimeta_input, create_characteristic_vector
+from bimeta import read_bimeta_input, create_characteristic_vector, assign_cluster
 
 # LOGGING
 logging.basicConfig(level=logging.INFO,
@@ -182,7 +182,8 @@ if __name__ == "__main__":
         ##########################################
         # CLUSTERING WITH LDA + BIMETA
         ##########################################
-        lda_bimeta_predictions = do_kmeans(top_dist, seeds=seeds, n_clusters=n_clusters, n_workers=n_workers)
+        lda_bimeta_predictions = do_kmeans(top_dist, seeds=seeds, seeds_dict=seeds_dict, n_clusters=n_clusters,
+                                           n_workers=n_workers)
 
         logging.info("Save LDA + Bimeta clustering result to csv file into %s ." % OUTPUT_DIR)
         lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)

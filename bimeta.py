@@ -104,10 +104,35 @@ def create_characteristic_vector(top_dist, seeds):
     return np.array(res)
 
 
+def assign_cluster(mean_vector_clusters, seeds):
+    """
+    Assign the cluster of the mean vector of a group in seed to each read in seed
+    :param mean_vector_clusters: cluster of the mean vector of a group in seeds
+    :type mean_vector_clusters: list of integer
+    :param seeds: reads in a group in seeds
+    :type seeds: a dictionary
+    :return:
+    """
+    logging.info("Assign cluster for reads in seeds.")
+    t1 = time.time()
+    # store cluster of each read
+    result = {}
+    for group_id, cluster in enumerate(mean_vector_clusters):
+        for read_id in seeds.get(group_id, []):
+            result[read_id] = cluster
+
+    # sort dict by read_id
+    sorted_dict = sorted(result.items(), key=lambda key: key[0])
+    cluster_reads = [item[1] for item in sorted_dict]
+    t2 = time.time()
+    logging.info("Finished assign cluster for reads in seeds in %f (s)." % (t2 - t1))
+    return cluster_reads
+
+
 def genOverlapGraph(reads, l=20, threshold=5):
     k_mer_dict = {}
     for idx, read in enumerate(reads):
-        for i in range(0, len(read)-l+1):
+        for i in range(0, len(read) - l + 1):
             k_mer = read[i:i + l]
             if k_mer not in k_mer_dict:
                 k_mer_dict[k_mer] = [idx]
@@ -119,7 +144,6 @@ def genOverlapGraph(reads, l=20, threshold=5):
             k_mer_dict.pop(key)
 
     overlap_dict = {}
-
 
     G = nx.Graph()
     for i in range(0, len(reads) - 1):
