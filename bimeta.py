@@ -84,7 +84,7 @@ def read_bimeta_input(path, file_name):
         for row_id, line in enumerate(f):
             if line.rstrip():
                 line = line.rstrip().split(',')
-                if len(line) <= 1:
+                if len(line) < 1:
                     continue
                 res[row_id] = [int(read_id) - 1 for read_id in line]
             else:

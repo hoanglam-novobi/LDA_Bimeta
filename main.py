@@ -180,8 +180,11 @@ if __name__ == "__main__":
 
         # read all reads in groups file, each row is a group. Note: it can be empty
         groupids = read_bimeta_input(BIMETA_INPUT, name + '.fna.groups.txt')
+        logging.info("Length groupids: %d." % len(groupids))
+
         # read all read in seeds file, each row is a group
         seedids = read_bimeta_input(BIMETA_INPUT, name + '.fna.seeds.txt')
+        logging.info("Length seedids: %d." % len(seedids))
 
         # combine groupids and seedids to groups
         groups = {}
