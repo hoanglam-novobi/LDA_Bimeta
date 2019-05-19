@@ -178,7 +178,7 @@ def do_LDA(corpus, dictionary, n_topics=10, n_worker=2, n_passes=15, max_iters=2
     t1 = time.time()
     # training LDA model
     lda_model = LdaMulticore(corpus, id2word=dictionary, num_topics=n_topics, passes=n_passes, workers=n_worker,
-                             iterations=max_iters)
+                             iterations=max_iters, alpha=1.0, eval_every=20, decay=0.7, eta=0.1)
     t2 = time.time()
     logging.info("Finished training LDA model in %f (s)." % (t2 - t1))
     return lda_model

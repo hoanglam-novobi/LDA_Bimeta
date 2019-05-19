@@ -162,7 +162,7 @@ if __name__ == "__main__":
 
         logging.info("Save LDA clustering result to csv file into %s ." % OUTPUT_DIR)
         lda_cluster_df = create_prediction_df(labels, lda_predictions)
-        lda_cluster_df.to_csv(OUTPUT_DIR + name + 'lda_prediction_result.csv', index=False)
+        lda_cluster_df.to_csv(OUTPUT_DIR + name + 'lda_prediction_result.csv', index=False, line_terminator='\n',encoding='utf-8')
 
         ##########################################
         # EVALUATE THE RESULT
@@ -202,7 +202,7 @@ if __name__ == "__main__":
 
         logging.info("Save LDA + Bimeta clustering result to csv file into %s ." % OUTPUT_DIR)
         lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
-        lda_bimeta_cluster_df.to_csv(OUTPUT_DIR + name + 'lda_bimeta_prediction_result.csv', index=False)
+        lda_bimeta_cluster_df.to_csv(OUTPUT_DIR + name + 'lda_bimeta_prediction_result.csv', index=False, line_terminator='\n',encoding='utf-8')
 
         ##########################################
         # EVALUATE THE RESULT
