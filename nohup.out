@@ -6384,3 +6384,771 @@ Call stack:
     logging.info("Length prediction", len(prediction))
 Message: 'Length prediction'
 Arguments: (195339,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (338725,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (338725,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 201, in <module>
+    n_workers=n_workers)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 1074, in wrapper
+    val = prof(func)(*args, **kwargs)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 660, in f
+    return func(*args, **kwds)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/kmeans.py", line 69, in do_kmeans
+    predictions = assign_cluster(mean_vector_clusters=seed_clusters, seeds=seeds_dict)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/bimeta.py", line 130, in assign_cluster
+    logging.info("Length result: ", len(result))
+Message: 'Length result: '
+Arguments: (338725,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (338725,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (338725,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (82960,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (82960,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 201, in <module>
+    n_workers=n_workers)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 1074, in wrapper
+    val = prof(func)(*args, **kwargs)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 660, in f
+    return func(*args, **kwds)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/kmeans.py", line 69, in do_kmeans
+    predictions = assign_cluster(mean_vector_clusters=seed_clusters, seeds=seeds_dict)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/bimeta.py", line 130, in assign_cluster
+    logging.info("Length result: ", len(result))
+Message: 'Length result: '
+Arguments: (82960,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (82960,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (82960,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (77293,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (77293,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 201, in <module>
+    n_workers=n_workers)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 1074, in wrapper
+    val = prof(func)(*args, **kwargs)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 660, in f
+    return func(*args, **kwds)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/kmeans.py", line 69, in do_kmeans
+    predictions = assign_cluster(mean_vector_clusters=seed_clusters, seeds=seeds_dict)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/bimeta.py", line 130, in assign_cluster
+    logging.info("Length result: ", len(result))
+Message: 'Length result: '
+Arguments: (77293,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (77293,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (77293,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (93267,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (93267,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 201, in <module>
+    n_workers=n_workers)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 1074, in wrapper
+    val = prof(func)(*args, **kwargs)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 660, in f
+    return func(*args, **kwds)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/kmeans.py", line 69, in do_kmeans
+    predictions = assign_cluster(mean_vector_clusters=seed_clusters, seeds=seeds_dict)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/bimeta.py", line 130, in assign_cluster
+    logging.info("Length result: ", len(result))
+Message: 'Length result: '
+Arguments: (93267,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (93267,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (93267,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (34457,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (34457,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 201, in <module>
+    n_workers=n_workers)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 1074, in wrapper
+    val = prof(func)(*args, **kwargs)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 660, in f
+    return func(*args, **kwds)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/kmeans.py", line 69, in do_kmeans
+    predictions = assign_cluster(mean_vector_clusters=seed_clusters, seeds=seeds_dict)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/bimeta.py", line 130, in assign_cluster
+    logging.info("Length result: ", len(result))
+Message: 'Length result: '
+Arguments: (34457,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (34457,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (34457,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (40043,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (40043,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 201, in <module>
+    n_workers=n_workers)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 1074, in wrapper
+    val = prof(func)(*args, **kwargs)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 660, in f
+    return func(*args, **kwds)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/kmeans.py", line 69, in do_kmeans
+    predictions = assign_cluster(mean_vector_clusters=seed_clusters, seeds=seeds_dict)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/bimeta.py", line 130, in assign_cluster
+    logging.info("Length result: ", len(result))
+Message: 'Length result: '
+Arguments: (40043,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (40043,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (40043,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (70550,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (70550,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 201, in <module>
+    n_workers=n_workers)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 1074, in wrapper
+    val = prof(func)(*args, **kwargs)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 660, in f
+    return func(*args, **kwds)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/kmeans.py", line 69, in do_kmeans
+    predictions = assign_cluster(mean_vector_clusters=seed_clusters, seeds=seeds_dict)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/bimeta.py", line 130, in assign_cluster
+    logging.info("Length result: ", len(result))
+Message: 'Length result: '
+Arguments: (70550,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (70550,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (70550,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (290473,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 164, in <module>
+    lda_cluster_df = create_prediction_df(labels, lda_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (290473,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 201, in <module>
+    n_workers=n_workers)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 1074, in wrapper
+    val = prof(func)(*args, **kwargs)
+  File "/home/student/.local/lib/python3.6/site-packages/memory_profiler.py", line 660, in f
+    return func(*args, **kwds)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/kmeans.py", line 69, in do_kmeans
+    predictions = assign_cluster(mean_vector_clusters=seed_clusters, seeds=seeds_dict)
+  File "/home/student/data/lthoang/LDABimeta/LDA_Bimeta/bimeta.py", line 130, in assign_cluster
+    logging.info("Length result: ", len(result))
+Message: 'Length result: '
+Arguments: (290473,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 24, in create_prediction_df
+    logging.info("Length actual", len(actual))
+Message: 'Length actual'
+Arguments: (290473,)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.6/logging/__init__.py", line 577, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.6/logging/__init__.py", line 338, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "main.py", line 204, in <module>
+    lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)
+  File "main.py", line 25, in create_prediction_df
+    logging.info("Length prediction", len(prediction))
+Message: 'Length prediction'
+Arguments: (290473,)
