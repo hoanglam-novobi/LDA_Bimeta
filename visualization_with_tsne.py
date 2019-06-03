@@ -10,6 +10,12 @@ import ast
 
 from MulticoreTSNE import MulticoreTSNE
 
+# LOGGING
+logging.basicConfig(level=logging.INFO,
+                    filename='LDABimeta.log',
+                    filemode='a', format='%(asctime)s %(name)s - %(levelname)s - %(message)s',
+                    datefmt='%y-%m-%d %H:%M:%S')
+
 
 def convert_to_dataframe(X_embedded, n_components=2):
     df = pd.DataFrame()
