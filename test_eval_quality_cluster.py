@@ -87,7 +87,9 @@ for key in groupids:
     groups[key] = groupids[key] + seedids[key]
 
 print("Length groups: ", len(groups))
-print("Length groups[0]: ", len(groups[0]))
+print("Length groups[4305]: ", len(groups[4305]))
+print("Length groupids[4305]: ", len(groupids[4305]))
+print("Length seedids[4305]: ", len(seedids[4305]))
 print(sorted(groups[0]))
 
 n_reads = 0

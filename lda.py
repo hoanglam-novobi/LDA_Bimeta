@@ -201,7 +201,7 @@ def do_LDA_Mallet(path_to_mallet_binary, corpus, dictionary, n_topics=10, n_work
     # training LDA model
     lda_model = LdaMallet(mallet_path=path_to_mallet_binary,
                           corpus=corpus, id2word=dictionary, num_topics=n_topics, workers=n_worker,
-                          optimize_interval=100, iterations=200)
+                          optimize_interval=20, iterations=200)
     t2 = time.time()
     logging.info("Finished training LDA Mallet model in %f (s)." % (t2 - t1))
     return lda_model

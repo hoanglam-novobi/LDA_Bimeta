@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import time
 import logging
@@ -106,57 +108,52 @@ if __name__ == "__main__":
         # READING FASTA FILE
         ##########################################
         is_pairend = True if name[0] == 'S' else False
-        reads = read_fasta_file(data_path + file_name, pair_end=is_pairend)
+        # reads = read_fasta_file(data_path + file_name, pair_end=is_pairend)
 
         ##########################################
         # CREATE DOCUMENTS, CORPUS
         ##########################################
-        dictionary, documents = parallel_create_document(reads, k=k, n_workers=n_workers)
-        del reads
-        logging.info("Delete reads for saving memory ...")
-        logging.info("Writing dictionary into %s." % OUTPUT_DIR)
-        dictionary.save(OUTPUT_DIR + 'dictionary-k%s.gensim' % (''.join(str(val) for val in k)))
-
-        # if you want to create corpus with TFIDF, set it is True
-        corpus = create_corpus(dictionary, documents, is_tfidf=is_tfidf, smartirs=smartirs)
-        # corpus_tfidf, dump_path, file_name
-        mmcorpus = serializeCorpus(corpus_tfidf=corpus, dump_path=OUTPUT_DIR, file_name=file_name)
-        # logging.info("Saving documents as .txt file for using later into %s ." % OUTPUT_DIR)
-        # save_documents(documents, OUTPUT_DIR + 'documents.txt')
-        logging.info("Deleting documents for saving memory ...")
-        del documents
-        logging.info("Writing corpus into %s." % OUTPUT_DIR)
-        corpus_name = 'corpus-tfidf.pkl' if is_tfidf else 'corpus.pkl'
-        pickle.dump(corpus, open(OUTPUT_DIR + corpus_name, 'wb'))
+        # dictionary, documents = parallel_create_document(reads, k=k, n_workers=n_workers)
+        # del reads
+        # logging.info("Delete reads for saving memory ...")
+        # logging.info("Writing dictionary into %s." % OUTPUT_DIR)
+        # dictionary.save(OUTPUT_DIR + 'dictionary-k%s.gensim' % (''.join(str(val) for val in k)))
+        #
+        # # if you want to create corpus with TFIDF, set it is True
+        # corpus = create_corpus(dictionary, documents, is_tfidf=is_tfidf, smartirs=smartirs)
+        # # corpus_tfidf, dump_path, file_name
+        # mmcorpus = serializeCorpus(corpus_tfidf=corpus, dump_path=OUTPUT_DIR, file_name=file_name)
+        # # logging.info("Saving documents as .txt file for using later into %s ." % OUTPUT_DIR)
+        # # save_documents(documents, OUTPUT_DIR + 'documents.txt')
+        # logging.info("Deleting documents for saving memory ...")
+        # del documents
+        # logging.info("Writing corpus into %s." % OUTPUT_DIR)
+        # corpus_name = 'corpus-tfidf.pkl' if is_tfidf else 'corpus.pkl'
+        # pickle.dump(corpus, open(OUTPUT_DIR + corpus_name, 'wb'))
 
         ##########################################
         # CREATE LDA MODEL IN GENSIM
         ##########################################
-        if run_with_LDAMallet:
-            # DON'T EDIT THIS PATH
-            path_to_lda_mallet = "/home/student/data/Mallet/bin/mallet"
-            lda_model = do_LDA_Mallet(path_to_lda_mallet, corpus=mmcorpus, dictionary=dictionary, n_topics=n_topics,
-                                      n_worker=n_workers)
-        else:
-            lda_model = do_LDA(corpus=mmcorpus, dictionary=dictionary, n_worker=n_workers, n_topics=n_topics, n_passes=n_passes)
+        # if run_with_LDAMallet:
+        #     # DON'T EDIT THIS PATH
+        #     path_to_lda_mallet = "/home/student/data/Mallet/bin/mallet"
+        #     lda_model = do_LDA_Mallet(path_to_lda_mallet, corpus=mmcorpus, dictionary=dictionary, n_topics=n_topics,
+        #                               n_worker=n_workers)
+        # else:
+        #     lda_model = do_LDA(corpus=mmcorpus, dictionary=dictionary, n_worker=n_workers, n_topics=n_topics,
+        #                        n_passes=n_passes)
 
-        logging.info("Saving LDA model into %s." % OUTPUT_DIR)
-        lda_model.save(OUTPUT_DIR + 'model-lda.gensim')
+        # lda_model.save(OUTPUT_DIR + 'model-lda.gensim')
 
         # get topic distribution
-        top_dist, lda_keys = getDocTopicDist_mp(model=lda_model, corpus=mmcorpus, n_workers=n_workers,
-                                                n_topics=n_topics)
+        # top_dist, lda_keys = getDocTopicDist_mp(model=lda_model, corpus=mmcorpus, n_workers=n_workers,
+        #                                         n_topics=n_topics)
 
         # read topic distribution from R
-        top_dist_df = pd.read_csv('.csv')
+        top_dist_df = pd.read_csv('/home/student/data/lthoang/R_output/prob_%s_fna_LDA_default.csv' % name)
         top_dist = top_dist_df.values
 
         logging.info("Shape of topic distribution: %s ", str(top_dist.shape))
-        logging.info("Deleting reads for saving memory ...")
-        del corpus
-        logging.info("Saving topic distribution into %s." % OUTPUT_DIR)
-        np.savetxt(OUTPUT_DIR + name + "top_dist.csv", top_dist, fmt='%.5e', delimiter=",",
-                   header=','.join([str(i) for i in range(n_topics)]))
         t2 = time.time()
         ##########################################
         # CLUSTERING WITH LDA
