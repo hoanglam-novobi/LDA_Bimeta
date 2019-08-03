@@ -138,7 +138,8 @@ if __name__ == "__main__":
             lda_model = do_LDA_Mallet(path_to_lda_mallet, corpus=mmcorpus, dictionary=dictionary, n_topics=n_topics,
                                       n_worker=n_workers)
         else:
-            lda_model = do_LDA(corpus=mmcorpus, dictionary=dictionary, n_worker=n_workers, n_topics=n_topics, n_passes=n_passes)
+            lda_model = do_LDA(corpus=mmcorpus, dictionary=dictionary, n_worker=n_workers, n_topics=n_topics,
+                               n_passes=n_passes)
 
         logging.info("Saving LDA model into %s." % OUTPUT_DIR)
         lda_model.save(OUTPUT_DIR + 'model-lda.gensim')

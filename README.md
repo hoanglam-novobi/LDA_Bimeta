@@ -50,4 +50,4 @@ If you got an error, so edit the line in build.xml to:
 Path for run LDAMallet in server: /home/student/data/Mallet/bin/mallet
 
 Run visualization with TSNE
-nohup python3.6 visualization_with_tsne.py -o /home/student/data/lthoang/kmer_frequency/tsne_result/ -i /home/student/data/lthoang/kmer_frequency/ -n R1 -d [2,3] -j 40&
+nohup python3.6 visualization_with_tsne.py -o /home/student/data/lthoang/kmer_frequency/tsne_result/ -i /home/student/data/lthoang/kmer_frequency/ -n [R1] -d [2,3] -j 40&
