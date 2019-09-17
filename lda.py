@@ -15,6 +15,7 @@ from gensim.models.tfidfmodel import TfidfModel
 from multiprocessing import Pool, Array, Value
 from gensim.models.wrappers import LdaMallet
 from gensim.test.utils import get_tmpfile
+from gensim.matutils import corpus2dense, Dense2Corpus
 
 # CONFIG FOR LOGGING MEMORY_PROFILER
 import sys
@@ -223,3 +224,172 @@ def load_dictionary(path, file_name):
 def load_corpus(path, file_name):
     corpus = pickle.load(open(path + file_name, 'rb'))
     return corpus
+
+
+def BM25_transform(term_frequency_matrix, k=1.2, b=0.75):
+    """
+    Implement BM25 ranking function
+    A1 = (k + 1).tf(w, d)
+    A2 = tf(w, d) + k(1 - b + b.(|d|/avdl))
+    B = ln((C + 1)/df(W))
+    :param term_frequency_matrix: a Numpy array
+    :param k,b: parameters of BM25 ranking algoritms
+    :return: a Numpy array with the same shape
+    """
+    # make a copy of matrix
+    data = np.copy(term_frequency_matrix)
+    # compute number of documents: C
+    C = data.shape[0]
+    print("Number of document in the corpus: ", C)
+    # compute |d|
+    number_of_words_in_documents = np.sum(data, axis=1)
+    print("Number of words in each documents: ", len(number_of_words_in_documents), number_of_words_in_documents)
+    # compute avdl
+    avg_document_length = np.mean(number_of_words_in_documents)
+    print("Average of document length: ", avg_document_length)
+    # compute df(W)
+    count_word_frequencies = np.sum(data, axis=0)
+    word_document_frequencies = np.where(count_word_frequencies > 0, count_word_frequencies, 0)
+    print("Frequency of work in document: ", len(word_document_frequencies))
+
+    # compute the component A1
+    A1 = (k + 1) * data
+    print("A1 :", A1.shape)
+
+    # compute the component A2
+    A2 = data + k * (1 - b + b * number_of_words_in_documents.reshape(-1, 1) / avg_document_length)
+    print("A2 :", A2.shape)
+
+    # compute the component B
+    B = np.log((C + 1) / word_document_frequencies.reshape(1, -1))
+    print("B: ", B.shape, np.sum(np.where(B < 0, 1, 0)))
+
+    result = A1 * B / A2
+    return result
+
+
+def pivoted_length_transform(term_frequency_matrix, b=0.4):
+    """
+    Implement Pivoted Length Normalization
+    A = ln(1 + ln(1 + tf(w, d)))/(1 - b + b*|d|/avdl)*log((C + 1)/df(w))
+    B = ln((C + 1)/df(W))
+    :param term_frequency_matrix: a Numpy array
+    :param b: parameters of Pivoted Length Normalization algoritm
+    :return: a Numpy array with the same shape
+    """
+    # make a copy of matrix
+    data = np.copy(term_frequency_matrix)
+    # compute number of documents: C
+    C = data.shape[0]
+    print("Number of document in the corpus: ", C)
+    # compute |d|
+    number_of_words_in_documents = np.sum(data, axis=1)
+    print("Number of words in each documents: ", len(number_of_words_in_documents), number_of_words_in_documents)
+    # compute avdl
+    avg_document_length = np.mean(number_of_words_in_documents)
+    print("Average of document length: ", avg_document_length)
+    # compute df(W)
+    count_word_frequencies = np.sum(data, axis=0)
+    word_document_frequencies = np.where(count_word_frequencies > 0, count_word_frequencies, 0)
+    print("Frequency of work in document: ", len(word_document_frequencies))
+
+    # compute component A
+    A = (1 / (1 - b + b * number_of_words_in_documents.reshape(-1, 1) / avg_document_length)) * np.log(
+        1 + np.log(1 + data))
+    print("A: ", A.shape)
+
+    # compute the component B
+    B = np.log2((C + 1) / word_document_frequencies.reshape(1, -1))
+    print("B: ", B.shape, np.sum(np.where(B < 0, 1, 0)))
+
+    result = A * B
+    return result
+
+
+def jelinek_mercer_pior_transform(term_frequency_matrix, a=0.2):
+    """
+    Implement Jelinek-Mercer prior
+    A = (1 - a)*(tf(w, d)/|d|)
+    B = a*p(w|C)
+    :param term_frequency_matrix: a Numpy array
+    :param a: lambda used in the fomular
+    :return: a Numpy array with the same shape
+    """
+    # make a copy of matrix
+    data = np.copy(term_frequency_matrix)
+    # compute number of documents: C
+    C = data.shape[0]
+    print("Number of document in the corpus: ", C)
+    # compute |d|
+    number_of_words_in_documents = np.sum(data, axis=1)
+    print("Number of words in each documents: ", len(number_of_words_in_documents), number_of_words_in_documents.shape)
+
+    # compute p(w|C)
+    prob_word_per_corpus = data / (sum(number_of_words_in_documents))
+
+    # compute A
+    A = (1 - a) * data / number_of_words_in_documents.reshape(-1, 1)
+
+    B = a * prob_word_per_corpus
+    result = A * B
+    return result
+
+
+def dirichlet_prior_transform(term_frequency_matrix, u=2000):
+    """
+    Implement Dirichlet prior
+    A = tf(w,d/(|d| + u))
+    B = u*p(w}C)/(|d| + u)
+    :param term_frequency_matrix: a Numpy array
+    :param u: parameter used in the fomular
+    :return: a Numpy array with the same shape
+    """
+    # make a copy of matrix
+    data = np.copy(term_frequency_matrix)
+    # compute number of documents: C
+    C = data.shape[0]
+    print("Number of document in the corpus: ", C)
+    # compute |d|
+    number_of_words_in_documents = np.sum(data, axis=1)
+    print("Number of words in each documents: ", len(number_of_words_in_documents), number_of_words_in_documents.shape)
+
+    # compute p(w|C)
+    prob_word_per_corpus = data / (sum(number_of_words_in_documents))
+
+    # compute A
+    A = data / (number_of_words_in_documents.reshape(-1, 1) + u)
+
+    B = u * prob_word_per_corpus / (number_of_words_in_documents.reshape(-1, 1) + u)
+    result = A * B
+    return result
+
+
+def PL2_transform(term_frequency_matrix, c=1):
+    """
+    Implement PL2
+    A = tf(w, d)*log(1 + c*avdl/|d|)
+    B = |C|/tf(w, C)
+    :param term_frequency_matrix: a Numpy array
+    :param c: parameter used in the fomular
+    :return: a Numpy array with the same shape
+    """
+    # make a copy of matrix
+    data = np.copy(term_frequency_matrix)
+    # compute number of documents: C
+    C = data.shape[0]
+    print("Number of document in the corpus: ", C)
+    # compute |d|
+    number_of_words_in_documents = np.sum(data, axis=1)
+    print("Number of words in each documents: ", len(number_of_words_in_documents), number_of_words_in_documents.shape)
+    # compute avdl
+    avg_document_length = np.mean(number_of_words_in_documents)
+    print("Average of document length: ", avg_document_length)
+    # compute A
+    A = data * np.log2(1 + c * avg_document_length / number_of_words_in_documents.reshape(-1, 1))
+    print("A: ", A.shape)
+    # compute B
+    word_frequency_per_corpus = np.sum(data, axis=0).reshape(-1, 1)
+    print("Word frequency per corpus: ", word_frequency_per_corpus.shape)
+    B = C / word_frequency_per_corpus
+    result = A * np.log2(B * A) + np.log2(np.e) * (1 / B - A) + 0.5 * np.log2(2 * np.pi * A) / (A + 1)
+    return result

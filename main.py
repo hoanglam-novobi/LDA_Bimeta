@@ -148,10 +148,6 @@ if __name__ == "__main__":
         top_dist, lda_keys = getDocTopicDist_mp(model=lda_model, corpus=mmcorpus, n_workers=n_workers,
                                                 n_topics=n_topics)
 
-        # read topic distribution from R
-        top_dist_df = pd.read_csv('.csv')
-        top_dist = top_dist_df.values
-
         logging.info("Shape of topic distribution: %s ", str(top_dist.shape))
         logging.info("Deleting reads for saving memory ...")
         del corpus
