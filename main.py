@@ -53,10 +53,10 @@ if __name__ == "__main__":
         smartirs = None
         is_seed = True
         run_with_LDAMallet = False
-        is_bm25 = False
+        trans_func = 'BoW'
 
         try:
-            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:w:s:e:r:f:')
+            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:w:s:e:r:t:')
         except getopt.GetoptError:
             print("Example for command line.")
             print(
@@ -102,10 +102,10 @@ if __name__ == "__main__":
             elif opt == '-r':
                 # use for training model
                 rand_state_number = int(arg)
-            elif opt == '-f':
-                # BM25 ranking function
-                is_bm25 = True if arg == '1' else False
-                
+            elif opt == '-t':
+                # weighting transform function: BM25, PL2, ...
+                trans_func = arg
+
         ##############
         extension_file = '.fna'
         file_name = name + extension_file
@@ -129,7 +129,8 @@ if __name__ == "__main__":
         dictionary.save(OUTPUT_DIR + 'dictionary-k%s.gensim' % (''.join(str(val) for val in k)))
 
         # if you want to create corpus with TFIDF, set it is True
-        corpus = create_corpus(dictionary, documents, is_tfidf=is_tfidf, is_log_entropy=is_log_entropy, smartirs=smartirs, is_bm25=is_bm25)
+        corpus = create_corpus(dictionary, documents, trans_func=None,
+                               is_tfidf=is_tfidf, is_log_entropy=is_log_entropy, smartirs=smartirs)
         # corpus_tfidf, dump_path, file_name
         mmcorpus = corpus
         # mmcorpus = serializeCorpus(corpus_tfidf=corpus, dump_path=OUTPUT_DIR, file_name=file_name)

@@ -109,23 +109,55 @@ def parallel_create_document(reads, k=[], n_workers=2):
 
 
 @profile
-def create_corpus(dictionary, documents, is_tfidf=False, smartirs=None, is_log_entropy=False, is_normalize=True, is_bm25=False):
-    logging.info("Creating BoW corpus ...")
+def create_corpus(dictionary, documents, trans_func=None, trans_params=None, is_tfidf=False, is_log_entropy=False,
+                  smartirs=None):
+    """
+    Create corpus to train a LDA model
+    By default, create a corpus as Bag of Word (Bow)
+    :param trans_func: the name of weighting transform function
+    Expected values:
+    - BoW == BoW Corpus
+    - TF_IDF: smartirs
+    - LOG_ENTROPY: normalize
+    - BM25: k, b
+    - PLN (Pivot Length Normalizaion): b
+    - JMP (Jelinek-Mercer Prior): a
+    - DP (Dirichlet prior): u
+    - PL2: c # not available now
+    :param trans_params: a dictionary to store value for parameters used in the algorithm
+    """
     t1 = time.time()
-    if is_bm25:
-        logging.info("Creating corpus with BM25 ...")
-        corpus = iter_bm25_bow(documents, n_jobs=-1)
+    trans_func_names = ['BoW', 'TF_IDF', 'LOG_ENTROPY', 'BM25', 'PLN', 'JMP', 'DP', 'PL2']
+    if trans_func not in trans_func_names:
+        raise Exception("Invalid value of trans_func in the function create_corpus: %r ." % (trans_func,))
+
+    logging.info("Creating BoW corpus ...")
+    corpus = [dictionary.doc2bow(d, allow_update=True) for d in documents]
+
+    if trans_func == 'TF_IDF' or is_tfidf == True:
+        logging.info("Creating corpus with TFIDF ...")
+        tfidf = TfidfModel(corpus=corpus, smartirs=smartirs)
+        corpus = tfidf[corpus]
+    elif trans_func == 'LOG_ENTROPY' or is_log_entropy == True:
+        logging.info("Creating corpus with Log Entropy ...")
+        log_entropy_model = LogEntropyModel(corpus, normalize=True)
+        corpus = log_entropy_model[corpus]
     else:
-        corpus = [dictionary.doc2bow(d, allow_update=True) for d in documents]
-        if is_tfidf:
-            logging.info("Creating corpus with TFIDF ...")
-            tfidf = TfidfModel(corpus=corpus, smartirs=smartirs)
-            corpus = tfidf[corpus]
-        elif is_log_entropy:
-            logging.info("Creating corpus with Log Entropy ...")
-            log_entropy_model = LogEntropyModel(corpus, normalize=is_normalize)
-            corpus = log_entropy_model[corpus]
-            
+        logging.info("Convert corpus to dense")
+        corpus_matrix = corpus2dense(corpus=corpus, num_terms=len(dictionary))
+        weighted_corpus_matrix = None
+        if trans_func == 'BM25':
+            weighted_corpus_matrix = BM25_transform(term_frequency_matrix=corpus_matrix)
+        elif trans_func == 'PLN':
+            weighted_corpus_matrix = pivoted_length_transform(term_frequency_matrix=corpus_matrix)
+        elif trans_func == 'JMP':
+            weighted_corpus_matrix = jelinek_mercer_pior_transform(term_frequency_matrix=corpus_matrix)
+        elif trans_func == 'DP':
+            weighted_corpus_matrix = dirichlet_prior_transform(term_frequency_matrix=corpus_matrix)
+
+        logging.info("Convert dense to corpus")
+        corpus = Dense2Corpus(dense=weighted_corpus_matrix)
+
     t2 = time.time()
     logging.info("Finished creating corpus in %f (s)." % (t2 - t1))
     return corpus
