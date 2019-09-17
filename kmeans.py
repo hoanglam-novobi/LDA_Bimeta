@@ -57,10 +57,10 @@ def parallel_evalQualityCluster(y_true, y_pred, n_workers=3, n_clusters=2):
 
 
 @profile
-def do_kmeans(top_dist, seeds=np.array([]), seeds_dict=None, n_clusters=2, n_workers=2, n_init=100, iters=10000):
+def do_kmeans(top_dist, seeds=np.array([]), seeds_dict=None, n_clusters=2, n_workers=2, n_init=100, iters=10000, random_state=1234):
     t1 = time.time()
     logging.info("Clustering with Kmeans ...")
-    kmeans = KMeans(n_clusters=n_clusters, n_jobs=n_workers, n_init=n_init, max_iter=iters)
+    kmeans = KMeans(n_clusters=n_clusters, n_jobs=n_workers, n_init=n_init, max_iter=iters, random_state=random_state)
 
     if seeds.size == 0:
         predictions = list(kmeans.fit_predict(top_dist))

@@ -10,6 +10,11 @@ import ast
 
 from MulticoreTSNE import MulticoreTSNE
 
+logging.basicConfig(level=logging.INFO,
+        filename='LDABimeta.log',
+        filemode='a', format='%(asctime)s %(name)s - %(levelname)s - %(message)s',
+        datefmt='%y-%m-%d %H:%M:%S')
+
 
 def convert_to_dataframe(X_embedded, n_components=2):
     df = pd.DataFrame()
@@ -95,7 +100,7 @@ if __name__ == "__main__":
         for d in n_dims:
             t1 = time.time()
             logging.info("Running MulticoreTSNE with n_dims = %d..." % d)
-            tsne = MulticoreTSNE(n_components=d)
+            tsne = MulticoreTSNE(n_components=d, n_jobs=n_workers)
             X_embedded = tsne.fit_transform(kmer_matrix)
             logging.info("X embedded shape: %s." % str(X_embedded.shape))
             t2 = time.time()

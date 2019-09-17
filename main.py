@@ -49,12 +49,14 @@ if __name__ == "__main__":
         data_path = ''
         n_workers = ''
         is_tfidf = False
+        is_log_entropy = False
         smartirs = None
         is_seed = True
         run_with_LDAMallet = False
+        is_bm25 = False
 
         try:
-            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:w:s:m:')
+            opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:w:s:e:r:f:')
         except getopt.GetoptError:
             print("Example for command line.")
             print(
@@ -95,6 +97,15 @@ if __name__ == "__main__":
                 is_seed = True if arg == '1' else False
             elif opt == '-m':
                 run_with_LDAMallet = True if arg == '1' else False
+            elif opt == '-e':
+                is_log_entropy = True if arg == '1' else False
+            elif opt == '-r':
+                # use for training model
+                rand_state_number = int(arg)
+            elif opt == '-f':
+                # BM25 ranking function
+                is_bm25 = True if arg == '1' else False
+                
         ##############
         extension_file = '.fna'
         file_name = name + extension_file
@@ -105,7 +116,7 @@ if __name__ == "__main__":
         ##########################################
         # READING FASTA FILE
         ##########################################
-        is_pairend = True if name[0] == 'S' else False
+        is_pairend = True if (name[0] == 'S' or name[0] == 'L') else False
         reads = read_fasta_file(data_path + file_name, pair_end=is_pairend)
 
         ##########################################
@@ -118,16 +129,17 @@ if __name__ == "__main__":
         dictionary.save(OUTPUT_DIR + 'dictionary-k%s.gensim' % (''.join(str(val) for val in k)))
 
         # if you want to create corpus with TFIDF, set it is True
-        corpus = create_corpus(dictionary, documents, is_tfidf=is_tfidf, smartirs=smartirs)
+        corpus = create_corpus(dictionary, documents, is_tfidf=is_tfidf, is_log_entropy=is_log_entropy, smartirs=smartirs, is_bm25=is_bm25)
         # corpus_tfidf, dump_path, file_name
-        mmcorpus = serializeCorpus(corpus_tfidf=corpus, dump_path=OUTPUT_DIR, file_name=file_name)
+        mmcorpus = corpus
+        # mmcorpus = serializeCorpus(corpus_tfidf=corpus, dump_path=OUTPUT_DIR, file_name=file_name)
         # logging.info("Saving documents as .txt file for using later into %s ." % OUTPUT_DIR)
         # save_documents(documents, OUTPUT_DIR + 'documents.txt')
         logging.info("Deleting documents for saving memory ...")
         del documents
         logging.info("Writing corpus into %s." % OUTPUT_DIR)
         corpus_name = 'corpus-tfidf.pkl' if is_tfidf else 'corpus.pkl'
-        pickle.dump(corpus, open(OUTPUT_DIR + corpus_name, 'wb'))
+        # pickle.dump(corpus, open(OUTPUT_DIR + corpus_name, 'wb'))
 
         ##########################################
         # CREATE LDA MODEL IN GENSIM
@@ -138,7 +150,7 @@ if __name__ == "__main__":
             lda_model = do_LDA_Mallet(path_to_lda_mallet, corpus=mmcorpus, dictionary=dictionary, n_topics=n_topics,
                                       n_worker=n_workers)
         else:
-            lda_model = do_LDA(mmcorpus, dictionary, n_worker=n_workers, n_topics=n_topics, n_passes=n_passes)
+            lda_model = do_LDA(mmcorpus, dictionary, n_worker=n_workers, n_topics=n_topics, n_passes=n_passes, random_state=rand_state_number)
 
         logging.info("Saving LDA model into %s." % OUTPUT_DIR)
         lda_model.save(OUTPUT_DIR + 'model-lda.gensim')
@@ -158,7 +170,7 @@ if __name__ == "__main__":
         ##########################################
         # create label for the dataset
         labels, n_clusters = create_labels(name)
-        lda_predictions = do_kmeans(top_dist, seeds=np.array([]), n_clusters=n_clusters, n_workers=n_workers)
+        lda_predictions = do_kmeans(top_dist, seeds=np.array([]), n_clusters=n_clusters, n_workers=n_workers, random_state=rand_state_number)
 
         logging.info("Save LDA clustering result to csv file into %s ." % OUTPUT_DIR)
         lda_cluster_df = create_prediction_df(labels, lda_predictions)
@@ -198,7 +210,7 @@ if __name__ == "__main__":
         # CLUSTERING WITH LDA + BIMETA
         ##########################################
         lda_bimeta_predictions = do_kmeans(top_dist, seeds=groupvectors, seeds_dict=groups, n_clusters=n_clusters,
-                                           n_workers=n_workers)
+                                           n_workers=n_workers, random_state=rand_state_number)
 
         logging.info("Save LDA + Bimeta clustering result to csv file into %s ." % OUTPUT_DIR)
         lda_bimeta_cluster_df = create_prediction_df(labels, lda_bimeta_predictions)

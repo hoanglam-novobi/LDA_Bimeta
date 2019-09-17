@@ -15,6 +15,7 @@ from gensim.models.tfidfmodel import TfidfModel
 from multiprocessing import Pool, Array, Value
 from gensim.models.wrappers import LdaMallet
 from gensim.test.utils import get_tmpfile
+from gensim.summarization.bm25 import get_bm25_weights, iter_bm25_bow
 
 # CONFIG FOR LOGGING MEMORY_PROFILER
 import sys
@@ -107,19 +108,23 @@ def parallel_create_document(reads, k=[], n_workers=2):
 
 
 @profile
-def create_corpus(dictionary, documents, is_tfidf=False, smartirs=None, is_log_entropy=False, is_normalize=True):
+def create_corpus(dictionary, documents, is_tfidf=False, smartirs=None, is_log_entropy=False, is_normalize=True, is_bm25=False):
     logging.info("Creating BoW corpus ...")
     t1 = time.time()
-    corpus = [dictionary.doc2bow(d, allow_update=True) for d in documents]
-    if is_tfidf:
-        logging.info("Creating corpus with TFIDF ...")
-        tfidf = TfidfModel(corpus=corpus, smartirs=smartirs)
-        corpus = tfidf[corpus]
-    elif is_log_entropy:
-        logging.info("Creating corpus with Log Entropy ...")
-        log_entropy_model = LogEntropyModel(corpus, normalize=is_normalize)
-        corpus = log_entropy_model[corpus]
-
+    if is_bm25:
+        logging.info("Creating corpus with BM25 ...")
+        corpus = iter_bm25_bow(documents, n_jobs=-1)
+    else:
+        corpus = [dictionary.doc2bow(d, allow_update=True) for d in documents]
+        if is_tfidf:
+            logging.info("Creating corpus with TFIDF ...")
+            tfidf = TfidfModel(corpus=corpus, smartirs=smartirs)
+            corpus = tfidf[corpus]
+        elif is_log_entropy:
+            logging.info("Creating corpus with Log Entropy ...")
+            log_entropy_model = LogEntropyModel(corpus, normalize=is_normalize)
+            corpus = log_entropy_model[corpus]
+            
     t2 = time.time()
     logging.info("Finished creating corpus in %f (s)." % (t2 - t1))
     return corpus
@@ -174,11 +179,11 @@ def getDocTopicDist_mp(model, corpus, n_topics=10, kwords=False, n_workers=20):
 
 
 @profile
-def do_LDA(corpus, dictionary, n_topics=10, n_worker=2, n_passes=15, max_iters=200):
+def do_LDA(corpus, dictionary, n_topics=10, n_worker=2, n_passes=15, max_iters=200, random_state=1234):
     t1 = time.time()
     # training LDA model
     lda_model = LdaMulticore(corpus, id2word=dictionary, num_topics=n_topics, passes=n_passes, workers=n_worker,
-                             iterations=max_iters, alpha=1.0, eval_every=20, decay=0.7, eta=0.1)
+                             iterations=max_iters, random_state=random_state)
     t2 = time.time()
     logging.info("Finished training LDA model in %f (s)." % (t2 - t1))
     return lda_model
