@@ -9,7 +9,7 @@ import pandas as pd
 
 from read_fasta import read_fasta_file, create_labels
 from lda import create_document, create_corpus, do_LDA, do_LDA_Mallet, getDocTopicDist_mp, save_documents, \
-    parallel_create_document, serializeCorpus
+    parallel_create_document, serializeCorpus, CUSTOM_TRANS_FUNC_NAMES
 from kmeans import do_kmeans, evalQuality
 from bimeta import read_bimeta_input, create_characteristic_vector, assign_cluster
 
@@ -58,6 +58,7 @@ if __name__ == "__main__":
         try:
             opts, args = getopt.getopt(sys.argv[1:], 'ho:d:b:i:k:n:p:j:c:w:s:e:r:t:')
         except getopt.GetoptError:
+            logging.exception(exc_info=True)
             print("Example for command line.")
             print(
                 "main.py -o <output_dir> -d <input dir> -b <bimeta_input> -i <input file> -k <k-mers> -n <num topics> -p <num passes> -j <n_workers> -c <is_tfidf> -w <localW, globalW> -s <seeds or groups>")
@@ -129,8 +130,8 @@ if __name__ == "__main__":
         dictionary.save(OUTPUT_DIR + 'dictionary-k%s.gensim' % (''.join(str(val) for val in k)))
 
         # if you want to create corpus with TFIDF, set it is True
-        corpus = create_corpus(dictionary, documents, trans_func=None,
-                               is_tfidf=is_tfidf, is_log_entropy=is_log_entropy, smartirs=smartirs)
+        corpus, transformed_corpus = create_corpus(dictionary, documents, trans_func=trans_func,
+                                                   is_tfidf=is_tfidf, is_log_entropy=is_log_entropy, smartirs=smartirs)
         # corpus_tfidf, dump_path, file_name
         mmcorpus = corpus
         # mmcorpus = serializeCorpus(corpus_tfidf=corpus, dump_path=OUTPUT_DIR, file_name=file_name)
@@ -150,6 +151,9 @@ if __name__ == "__main__":
             path_to_lda_mallet = "/home/student/data/Mallet/bin/mallet"
             lda_model = do_LDA_Mallet(path_to_lda_mallet, corpus=mmcorpus, dictionary=dictionary, n_topics=n_topics,
                                       n_worker=n_workers)
+        elif trans_func in CUSTOM_TRANS_FUNC_NAMES:
+            lda_model = do_LDA(transformed_corpus, dictionary, n_worker=n_workers, n_topics=n_topics, n_passes=n_passes,
+                               random_state=rand_state_number)
         else:
             lda_model = do_LDA(mmcorpus, dictionary, n_worker=n_workers, n_topics=n_topics, n_passes=n_passes,
                                random_state=rand_state_number)

@@ -24,6 +24,10 @@ from memory_profiler import profile, LogFile
 
 sys.stdout = LogFile(__name__)
 
+# CONSTANT
+CUSTOM_TRANS_FUNC_NAMES = ['BM25', 'PLN', 'JMP', 'DP', 'PL2']
+ORIGINAL_TRANS_FUNC_NAMES = ['BoW', 'TF_IDF', 'LOG_ENTROPY']
+
 
 @profile
 def genkmers(k):
@@ -127,21 +131,21 @@ def create_corpus(dictionary, documents, trans_func=None, trans_params=None, is_
     :param trans_params: a dictionary to store value for parameters used in the algorithm
     """
     t1 = time.time()
-    trans_func_names = ['BoW', 'TF_IDF', 'LOG_ENTROPY', 'BM25', 'PLN', 'JMP', 'DP', 'PL2']
-    if trans_func not in trans_func_names:
+    if trans_func not in (CUSTOM_TRANS_FUNC_NAMES + ORIGINAL_TRANS_FUNC_NAMES):
         raise Exception("Invalid value of trans_func in the function create_corpus: %r ." % (trans_func,))
 
     logging.info("Creating BoW corpus ...")
     corpus = [dictionary.doc2bow(d, allow_update=True) for d in documents]
+    transformed_corpus = None
 
     if trans_func == 'TF_IDF' or is_tfidf == True:
         logging.info("Creating corpus with TFIDF ...")
         tfidf = TfidfModel(corpus=corpus, smartirs=smartirs)
-        corpus = tfidf[corpus]
+        transformed_corpus = tfidf[corpus]
     elif trans_func == 'LOG_ENTROPY' or is_log_entropy == True:
         logging.info("Creating corpus with Log Entropy ...")
         log_entropy_model = LogEntropyModel(corpus, normalize=True)
-        corpus = log_entropy_model[corpus]
+        transformed_corpus = log_entropy_model[corpus]
     else:
         logging.info("Convert corpus to dense")
         corpus_matrix = corpus2dense(corpus=corpus, num_terms=len(dictionary))
@@ -156,11 +160,11 @@ def create_corpus(dictionary, documents, trans_func=None, trans_params=None, is_
             weighted_corpus_matrix = dirichlet_prior_transform(term_frequency_matrix=corpus_matrix)
 
         logging.info("Convert dense to corpus")
-        corpus = Dense2Corpus(dense=weighted_corpus_matrix)
+        transformed_corpus = Dense2Corpus(dense=weighted_corpus_matrix)
 
     t2 = time.time()
     logging.info("Finished creating corpus in %f (s)." % (t2 - t1))
-    return corpus
+    return corpus, transformed_corpus
 
 
 @profile
